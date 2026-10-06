@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Orario interattivo delle lezioni di Fisica Sapienza, per canale, insegnamenti scelti e occupazione delle aule." />
+    <meta name="theme-color" content="#751a2c" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23751a2c'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23fff7ed'/%3E%3Cellipse cx='32' cy='32' rx='24' ry='10' fill='none' stroke='%23fff7ed' stroke-width='4'/%3E%3Cellipse cx='32' cy='32' rx='10' ry='24' fill='none' stroke='%23f4b942' stroke-width='4' transform='rotate(32 32 32)'/%3E%3C/svg%3E" />
+    <title>Orari Fisica · Sapienza</title>
+    <link rel="stylesheet" href="styles.css?v=3" />
+    <script src="app.js?v=2" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand" aria-label="Orari Fisica Sapienza">
+        <span class="brand-mark" aria-hidden="true">φ</span>
+        <span>Orari Fisica</span>
+      </div>
+      <p class="author-credit" title="Autore del progetto">Mattia D'Angelo</p>
+      <div class="term-meta">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>1° semestre 2026/27</span>
+        <span class="meta-divider" aria-hidden="true"></span>
+        <span>28 set — 16 gen</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="workspace-heading">
+        <div>
+          <p class="eyebrow">Dipartimento di Fisica · Sapienza</p>
+          <h1>Il tuo orario, senza tabelle infinite.</h1>
+        </div>
+        <a class="source-link" href="https://www.phys.uniroma1.it/sites/default/files/allegati/orariolezioni/orario_s1_2627_v9.html" target="_blank" rel="noreferrer">
+          Fonte ufficiale <span aria-hidden="true">↗</span>
+        </a>
+      </section>
+
+      <nav class="view-switch" aria-label="Modalità" role="tablist">
+        <button class="view-tab is-active" id="tab-personal" role="tab" aria-selected="true" aria-controls="panel-personal" data-view="personal">
+          <span class="tab-icon" aria-hidden="true">◫</span>
+          Il mio orario
+        </button>
+        <button class="view-tab" id="tab-rooms" role="tab" aria-selected="false" aria-controls="panel-rooms" data-view="rooms">
+          <span class="tab-icon" aria-hidden="true">⌂</span>
+          Occupazione aule
+        </button>
+      </nav>
+
+      <section id="panel-personal" class="view-panel" role="tabpanel" aria-labelledby="tab-personal">
+        <div class="control-deck" aria-label="Personalizza l'orario">
+          <div class="control-group compact">
+            <span class="control-label">Corso</span>
+            <div class="segmented" role="group" aria-label="Corso di laurea">
+              <button class="segment is-active" data-degree="T">Triennale</button>
+              <button class="segment" data-degree="M">Magistrale</button>
+            </div>
+          </div>
+
+          <div class="control-group compact">
+            <label class="control-label" for="year-select">Anno</label>
+            <select id="year-select" class="select-control"></select>
+          </div>
+
+          <div class="control-group compact" id="channel-group">
+            <label class="control-label" for="channel-select">Canale</label>
+            <select id="channel-select" class="select-control"></select>
+          </div>
+
+          <div class="control-group choice-control" id="choice-group">
+            <span class="control-label">Insegnamenti a scelta</span>
+            <details class="choice-picker" id="choice-picker">
+              <summary>
+                <span id="choice-summary">Seleziona insegnamenti</span>
+                <span class="chevron" aria-hidden="true">⌄</span>
+              </summary>
+              <div class="choice-menu">
+                <div class="choice-menu-head">
+                  <strong>Aggiungi al calendario</strong>
+                  <button id="clear-choices" type="button">Azzera</button>
+                </div>
+                <div id="choice-options" class="choice-options"></div>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <div class="selection-strip" id="selection-strip"></div>
+        <div id="empty-choice" class="inline-notice" hidden>
+          Scegli uno o più insegnamenti dal menu per comporre l’orario.
+        </div>
+      </section>
+
+      <section id="panel-rooms" class="view-panel" role="tabpanel" aria-labelledby="tab-rooms" hidden>
+        <div class="control-deck room-controls" aria-label="Scegli aula">
+          <div class="control-group">
+            <label class="control-label" for="building-select">Edificio</label>
+            <select id="building-select" class="select-control"></select>
+          </div>
+          <div class="control-group room-grow">
+            <label class="control-label" for="room-select">Aula</label>
+            <select id="room-select" class="select-control"></select>
+          </div>
+          <div class="room-stat" aria-live="polite">
+            <span id="room-stat-value">—</span>
+            <small>ore occupate nella settimana</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="calendar-shell" aria-label="Calendario settimanale">
+        <div class="calendar-toolbar">
+          <div>
+            <p class="calendar-kicker" id="calendar-kicker">Calendario personale</p>
+            <h2 id="week-title">Settimana</h2>
+          </div>
+          <div class="calendar-actions">
+            <button class="calendar-button" id="add-calendar" type="button">
+              <span aria-hidden="true">＋</span> Aggiungi a calendario
+            </button>
+            <div class="date-controls">
+              <button class="icon-button" id="prev-week" aria-label="Settimana precedente">‹</button>
+              <label class="date-field">
+                <span class="sr-only">Scegli una data</span>
+                <input type="date" id="date-picker" min="2026-09-28" max="2027-01-16" />
+              </label>
+              <button class="today-button" id="today-button">Oggi</button>
+              <button class="icon-button" id="next-week" aria-label="Settimana successiva">›</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="calendar-scroll" tabindex="0" aria-label="Scorri il calendario orizzontalmente">
+          <div class="week-grid" id="week-grid" aria-live="polite"></div>
+        </div>
+        <div class="mobile-agenda" id="mobile-agenda" aria-live="polite"></div>
+
+        <div class="legend-row">
+          <div class="legend-items" id="legend-items"></div>
+          <p class="provisional-note"><span aria-hidden="true">●</span> Orario provvisorio · verifica sempre la fonte ufficiale</p>
+        </div>
+      </section>
+
+      <div id="load-error" class="error-panel" hidden>
+        <strong>Non riesco a caricare i dati dell’orario.</strong>
+        <p>Apri il sito tramite GitHub Pages o un server locale, poi riprova.</p>
+      </div>
+    </main>
+
+    <dialog class="calendar-dialog" id="calendar-dialog" aria-labelledby="calendar-dialog-title">
+      <form method="dialog" class="dialog-card">
+        <div class="dialog-head">
+          <div>
+            <p class="calendar-kicker">Esporta il tuo orario</p>
+            <h2 id="calendar-dialog-title">Aggiungi a calendario</h2>
+          </div>
+          <button class="dialog-close" value="cancel" aria-label="Chiudi">×</button>
+        </div>
+        <p class="dialog-intro" id="calendar-dialog-intro">Tutte le lezioni visualizzate verranno aggiunte come eventi settimanali, rispettando le date di inizio e fine.</p>
+        <div class="platform-list">
+          <button class="platform-button" id="export-apple" type="button">
+            <span class="platform-icon apple" aria-hidden="true"></span>
+            <span><strong>Apple Calendar</strong><small>iPhone, iPad e Mac</small></span>
+            <span class="platform-action">Scarica .ics</span>
+          </button>
+          <button class="platform-button" id="export-google" type="button">
+            <span class="platform-icon google" aria-hidden="true">G</span>
+            <span><strong>Google Calendar</strong><small>Scarica e apri Importa</small></span>
+            <span class="platform-action">Continua</span>
+          </button>
+          <button class="platform-button" id="export-android" type="button">
+            <span class="platform-icon android" aria-hidden="true">A</span>
+            <span><strong>Android</strong><small>Apri con l’app calendario</small></span>
+            <span class="platform-action">Scarica .ics</span>
+          </button>
+        </div>
+        <p class="export-status" id="export-status" role="status"></p>
+        <p class="dialog-footnote">Il calendario esportato non si aggiorna automaticamente se l’orario ufficiale cambia.</p>
+      </form>
+    </dialog>
+
+    <footer>
+      <p>Interfaccia indipendente basata sull’orario ufficiale v9. I dati restano di competenza del Dipartimento di Fisica.</p>
+    </footer>
+  </body>
+</html>

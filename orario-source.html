@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<link
+		href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Patrick+Hand"
+		rel="stylesheet">
+	<!--link rel="stylesheet" href="style.css"-->
+	
+	<style>
+	body {
+		margin: 0;
+		font-family: 'Open Sans', serif;
+		/*font-family: 'Roboto', sans-serif;*/
+		font-size: 16px;
+		max-width: 1024px;
+		font-weight: 400;
+		line-height: 1.5;
+		color: #333333;
+		margin: auto;
+		/*background-color: #822433;*/
+	}
+	
+	small {
+		color: #888888;
+		font-size: 10px;
+	}
+	
+	span.T1 {
+		color: #0074d9;
+	}
+	
+	span.T2 {
+		color: #ff851b;
+	}
+	
+	span.T3 {
+		color: #ff4136;
+	}
+	
+	span.M1 {
+		color: #3d9970;
+	}
+	
+	span.M2 {
+		color: #b10dc9;
+	}
+	
+	div.page {
+		padding: 12px;
+		/*box-shadow: 0px 0px 10px #000000;*/
+		background-color: #ffffff
+	}
+	
+	h1 {
+		font-size: 24pt;
+		font-weight: 300;
+		color: #822433;
+		margin-bottom: 3pt;
+	}
+	
+	h2 {
+		font-size: 20pt;
+		font-weight: 300;
+		color: #822433;
+	}
+	
+	h3 {
+		font-size: 20pt;
+		font-weight: 300;
+		color: #782b35;
+		page-break-before: always;
+	}
+	
+	h4 {
+		margin-top: 0pt;
+		font-size: 16pt;
+		font-weight: 700;
+		color: #000000;
+	}
+	
+	a {
+		color: #00b3be;
+		text-decoration: none;
+	}
+	
+	a:hover {
+		color: #f69240;
+	}
+	
+	b {
+		font-weight: 700;
+	}
+	
+	table {
+		width: 100%;
+		font-family: arial, sans-serif;
+		border-collapse: collapse;
+	}
+	
+	th {
+		border: 1px solid #000000;
+		background-color: #000000;
+		color: #ffffff;
+		text-align: center;
+		font-weight: bold;
+		padding: 8px;
+	}
+	
+	td {
+		border: 1px solid #cccccc;
+		text-align: center;
+		padding: 4px;
+		min-width: 60px;
+	}
+	
+	td.legend {
+		border: 0px;
+		border-right: 4px solid #ffffff;
+		font-weight: normal !important;
+	}
+	
+	td:nth-child(1) {
+		font-weight: bold;
+	}
+	
+	.studgroup tr:nth-child(odd) {
+		background-color: #eeeeee;
+	}
+	
+	.studgroup td:nth-child(1) {
+		width: 35%;
+	}
+	
+	.studgroup td:nth-child(2) {
+		width: 15%;
+	}
+	
+	.studgroup td:nth-child(n+3) {
+		width: 10%;
+	}
+	
+	.classroom td:nth-child(1) {
+		width: 5%;
+	}
+	
+	.classroom td:nth-child(n+2) {
+		width: 19%;
+	}
+	
+	@media print {
+		h1 {
+			font-size: 18pt;
+		}
+		h2 {
+			font-size: 14pt;
+		}
+		h3 {
+			font-size: 14pt;
+			page-break-before: always;
+		}
+		html {
+			width: 210mm;
+			height: 297mm;
+		}
+		body {
+			margin: 0mm 0mm 0mm 0mm;
+			font-size: 8pt;
+			background-color: #ffffff;
+		}
+		td {
+			font-size: 8pt;
+			padding: 3px;
+		}
+		th {
+			font-size: 10pt;
+		}
+		div.page {
+			box-shadow: none;
+		}
+		small {
+			font-size: 6px;
+		}
+	}
+	
+	@media screen {
+		body {
+			font-size: 16px;
+			max-width: 1024px;
+			width: 100%;
+		}
+		h3 {
+			margin-top: 20px;
+		}
+	}
+	
+	#overlay {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 2;
+	}
+	
+	#text{
+		position: fixed;
+		padding: 20px;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		font-size: 30px;
+		color: rgb(200, 200, 200);
+		background: rgba(0, 0, 0, 0.9);
+		text-align: center;
+	}
+	
+	.back-to-top {
+		position: fixed;
+		left: 30px;
+		bottom: 20px;
+		z-index: 3;
+		cursor: pointer;
+		font-size: 30px;
+	}
+	
+	.arrow-up {
+		border: solid #00b3be;
+		border-width: 0 6px 6px 0;
+		display: inline-block;
+		padding: 6px;
+		transform: rotate(-135deg);
+		-webkit-transform: rotate(-135deg);
+	}
+	
+	.hidden {
+	  display: none;
+	}
+	</style>
+	
+	<script type="text/javascript">
+		// code that controls the behaviour of the "back to the top" button
+		function init_page() {
+			const showOnPx = 100;
+			const backToTopButton = document.querySelector(".back-to-top")
+			
+			const scrollContainer = () => {
+				return document.documentElement || document.body;
+			};
+			
+			document.addEventListener("scroll", () => {
+				if (scrollContainer().scrollTop > showOnPx) {
+					backToTopButton.classList.remove("hidden")
+				} 
+				else {
+					backToTopButton.classList.add("hidden")
+				}
+			});
+			
+			const goToTop = () => {
+				document.body.scrollIntoView();
+			};
+			
+			backToTopButton.addEventListener("click", goToTop)
+		}
+	</script>
+	
+	<title>Orario A.A. 2026/2027 - I semestre</title>
+
+</head>
+
+<body onload="init_page()">
+	<a class="back-to-top hidden"><i class="arrow-up"></i></a>
+	
+	
+	<div id="text">Orario provvisorio</div>
+	
+
+	<div class="page">
+		<h1>
+			Calendario didattico - A.A. 2026/2027 - <span
+				style="text-decoration: underline;">I semestre</span>
+		</h1>
+		<h4>28/09/2026 - 16/01/2027</h4>
+
+		<h2>Calendario delle lezioni</h2>
+
+		<ul>
+			<li>Laurea Triennale
+				<ol>
+					<li><a href="#T1">Primo anno</a>
+					<li><a href="#T2">Secondo anno</a>
+					<li><a href="#T3">Terzo anno</a>
+				</ol>
+			<li>Laurea Magistrale
+				<ol>
+					<li><a href="#M1">Primo anno</a>
+					<li><a href="#M2">Secondo anno</a>
+				</ol>
+		</ul>
+
+		<h2>Piano di occupazione delle aule</h2>
+		<ul>
+			<li>Edificio Marconi
+				<ul>
+				
+					<li><a href="#Amaldi">Amaldi</a></li>
+				
+					<li><a href="#Conversi">Conversi</a></li>
+				
+					<li><a href="#Rasetti">Rasetti</a></li>
+				
+					<li><a href="#Careri">Careri</a></li>
+				
+					<li><a href="#LabSS-LabAstro">Laboratorio di Sistemi e Segnali e Astrofisica</a></li>
+				
+					<li><a href="#Majorana">Majorana</a></li>
+				
+				</ul>
+			</li>
+
+			<li>Edificio Fermi
+				<ul>
+				
+					<li><a href="#Cabibbo">Cabibbo</a></li>
+				
+					<li><a href="#Aula3">Aula 3 “Nella Mortara”</a></li>
+				
+					<li><a href="#Aula4">Aula 4 “Giustina Baroni”</a></li>
+				
+					<li><a href="#Aula8">Aula 8</a></li>
+				
+					<li><a href="#LabCalc">Sala Calcolo</a></li>
+				
+				</ul>
+			</li>
+
+			<li>Altro
+				<ul>
+				
+					<li><a href="#AulaI">Aula I (edificio Caglioti di Chimica - CU032)</a></li>
+				
+					<li><a href="#Aula17">Aula 17 (Laboratori di Via Tiburtina – RM025)</a></li>
+				
+					<li><a href="#LabTermo">Laboratorio di Termodinamica (Laboratori di Via Tiburtina – RM025)</a></li>
+				
+					<li><a href="#AulaIII">Aula III (edificio Caglioti di Chimica - CU032)</a></li>
+				
+				</ul>
+			</li>
+		</ul>
+		
+		
+			<a name=T1><h3>Triennale I anno</h3></a>
+<table class="studgroup"><tr><th>Insegnamento</th><th>Docente</th><th> LUN </th><th> MAR </th><th> MER </th><th> GIO </th><th> VEN </th></tr><tr><td>Analisi (A-De)</td><td>Polsiglione</td><td>Aula I <br>14-15<br>Aula I <br>15-16<br><small>dal 28/09/26<br>al 20/11/26</small></td><td></td><td>Aula I <br>11-13</td><td>Aula I <br>15-17</td><td>Aula I <br>8-10</td><tr><td>Analisi (Df-Ll)</td><td>Birindelli/Rossi</td><td>Aula I <br>10-12</td><td>Aula I <br>11-13</td><td></td><td>Aula I <br>11-13</td><td>Aula I <br>14-15<br>Aula I <br>15-16<br><small>dal 28/09/26<br>al 13/11/26</small></td><tr><td>Analisi (Ll-P)</td><td>Borrelli</td><td>Amaldi <br>14-16</td><td>Amaldi <br>8-10</td><td>Amaldi <br>15-16<br>Amaldi <br>16-17<br><small>dal 28/09/26<br>al 20/11/26</small></td><td>Amaldi <br>10-12</td><td></td><tr><td>Analisi (Q-Z)</td><td>Pinzari</td><td>Amaldi <br>8-10</td><td>Amaldi <br>14-16</td><td>Amaldi <br>10-11<br>Amaldi <br>11-12<br><small>dal 28/09/26<br>al 20/11/26</small></td><td></td><td>Cabibbo <br>10-12</td></tr><tr><td>Geometria (A-De)</td><td>Spinelli</td><td>Aula I <br>15-16<br><small>dal 23/11/26<br>al 15/01/27</small><br>Aula I <br>16-17</td><td>Aula I <br>9-11</td><td>Aula I <br>13-15</td><td></td><td>Aula I <br>10-12</td><tr><td>Geometria (Df-Ll)</td><td>Manetti</td><td>Aula I <br>8-10</td><td></td><td>Aula I <br>16-18</td><td>Aula I <br>13-15</td><td>Aula I <br>15-16<br><small>dal 16/11/26<br>al 15/01/27</small><br>Aula I <br>16-17</td><tr><td>Geometria (Ll-P)</td><td>Mondello</td><td></td><td>Amaldi <br>12-14</td><td>Amaldi <br>17-18<br>Amaldi <br>16-17<br><small>dal 23/11/26<br>al 15/01/27</small></td><td>Amaldi <br>8-10</td><td>Amaldi <br>12-14</td><tr><td>Geometria (Q-Z)</td><td>Molcho</td><td>Amaldi <br>10-12</td><td>Amaldi <br>16-18</td><td>Amaldi <br>11-12<br><small>dal 23/11/26<br>al 15/01/27</small><br>Amaldi <br>12-13</td><td>Cabibbo <br>15-17</td><td></td></tr><tr><td>Laboratorio di Calcolo (A-De)</td><td>Artoni</td><td>Aula I <br>17-19<br>Lab. Calcolo (a)<br>10-13<br><small>dal 12/10/26<br>al 15/01/27</small></td><td>Aula I <br>8-9<br>Lab. Calcolo (b)<br>11-14<br><small>dal 12/10/26<br>al 15/01/27</small></td><td>Lab. Calcolo (c)<br>16-19<br><small>dal 12/10/26<br>al 15/01/27</small></td><td></td><td></td><tr><td>Laboratorio di Calcolo (Df-Ll)</td><td>Boeri</td><td>Aula 17 (a)<br>14-17<br><small>dal 12/10/26<br>al 15/01/27</small></td><td>Aula I <br>13-15<br>Aula 17 (b)<br>8-11<br><small>dal 12/10/26<br>al 15/01/27</small></td><td>Aula I <br>18-19<br>Lab. Calcolo (c)<br>13-16<br><small>dal 12/10/26<br>al 15/01/27</small></td><td></td><td></td><tr><td>Laboratorio di Calcolo (Ll-P)</td><td>Monacelli</td><td></td><td></td><td>Amaldi <br>13-15<br>Lab. Calcolo (a)<br>9-12<br><small>dal 12/10/26<br>al 15/01/27</small></td><td>Lab. Calcolo (b)<br>12-15<br><small>dal 12/10/26<br>al 15/01/27</small></td><td>Amaldi <br>11-12<br>Lab. Calcolo (c)<br>15-18<br><small>dal 12/10/26<br>al 15/01/27</small></td><tr><td>Laboratorio di Calcolo (Q-Z)</td><td>Rahatlou</td><td>Lab. Calcolo (a)<br>13-16<br><small>dal 12/10/26<br>al 15/01/27</small></td><td></td><td>Cabibbo <br>8-10</td><td>Lab. Calcolo (b)<br>9-12<br><small>dal 12/10/26<br>al 15/01/27</small></td><td>Cabibbo <br>9-10<br>Lab. Calcolo (c)<br>12-15<br><small>dal 12/10/26<br>al 15/01/27</small></td></tr><tr><td>Laboratorio di Meccanica (A-De)</td><td>Organtini</td><td></td><td></td><td></td><td>Aula I <br>17-19</td><td>Aula I <br>12-14</td><tr><td>Laboratorio di Meccanica (Df-Ll)</td><td>De Cecco</td><td></td><td></td><td></td><td>Aula 4 <br>15-17</td><td>Aula 4 <br>12-14</td><tr><td>Laboratorio di Meccanica (Ll-P)</td><td>Baldassarre</td><td>Amaldi <br>16-18</td><td>Amaldi <br>10-12</td><td></td><td></td><td></td><tr><td>Laboratorio di Meccanica (Q-Z)</td><td>Piacentini</td><td></td><td></td><td>Aula 4 <br>13-15</td><td>Aula 4 <br>12-14</td><td></td></tr></table>
+
+		
+			<a name=T2><h3>Triennale II anno</h3></a>
+<table class="studgroup"><tr><th>Insegnamento</th><th>Docente</th><th> LUN </th><th> MAR </th><th> MER </th><th> GIO </th><th> VEN </th></tr><tr><td>Analisi Vettoriale (A-Di)</td><td>Lanzara</td><td>Aula 4 <br>8-10</td><td>Aula 4 <br>16-18</td><td>Aula 4 <br>17-19</td><td></td><td>Amaldi <br>14-16</td><tr><td>Analisi Vettoriale (Dl-Pap)</td><td>De Marchis</td><td>Cabibbo <br>8-10</td><td>Cabibbo <br>14-16</td><td>Cabibbo <br>12-14</td><td></td><td>Cabibbo <br>14-16</td><tr><td>Analisi Vettoriale (Paq-Z)</td><td>Terracina</td><td>Aula 3 <br>11-13</td><td>Aula 3 <br>16-18</td><td>Aula 3 <br>15-17</td><td></td><td>Aula 4 <br>16-18</td></tr><tr><td>Laboratorio di Fisica Computazionale I (A-Di)</td><td>Rovigatti</td><td>Aula 4 <br>10-12</td><td>Aula 4 <br>15-16</td><td></td><td>Aula 17 (a)<br>13-16</td><td>Aula 17 (b)<br>16-19</td><tr><td>Laboratorio di Fisica Computazionale I (Dl-Pap)</td><td>Mancini Terracciano</td><td></td><td>Cabibbo <br>16-18</td><td></td><td>Cabibbo <br>12-13<br>Aula 17 (a)<br>16-19</td><td>Lab. Calcolo (c)<br>9-12<br>Aula 17 (b)<br>10-13</td><tr><td>Laboratorio di Fisica Computazionale I (Paq-Z)</td><td>Marinari</td><td>Cabibbo <br>16-18</td><td></td><td>Aula 3 <br>17-18</td><td>Aula 17 (a)<br>9-12</td><td>Aula 17 (b)<br>13-16</td></tr><tr><td>Meccanica Analitica (A-Di)</td><td>Mastropietro</td><td>Aula I <br>12-14</td><td></td><td>Cabibbo <br>14-16</td><td>Cabibbo <br>18-19</td><td></td><tr><td>Meccanica Analitica (Dl-Pap)</td><td>Papinutto</td><td></td><td></td><td>Cabibbo <br>10-12</td><td>Cabibbo <br>10-12</td><td>Cabibbo <br>13-14</td><tr><td>Meccanica Analitica (Paq-Z)</td><td>Zamponi</td><td>Aula 3 <br>13-15</td><td>Aula 3 <br>14-16</td><td></td><td>Cabibbo <br>14-15</td><td></td></tr><tr><td>Termodinamica e Laboratorio (A-Di)</td><td>Santanastasio</td><td></td><td>Lab. Termo. <br>10-14</td><td>Aula 3 <br>12-14<br><small>dal 05/10/26<br>al 15/01/27</small></td><td>Aula 3 <br>16-18</td><td></td><tr><td>Termodinamica e Laboratorio (Dl-Pap)</td><td>Del Re E.</td><td>Lab. Termo. (a)<br>10-14</td><td>Cabibbo <br>12-14</td><td>Aula III <br>8-10</td><td>Lab. Termo. (b)<br>15-19</td><td></td><tr><td>Termodinamica e Laboratorio (Paq-Z)</td><td>Del Re D.</td><td></td><td>Aula 3 <br>12-14</td><td>Lab. Termo. <br>10-14</td><td>Aula 3 <br>12-14</td><td></td></tr></table>
+
+		
+			<a name=T3><h3>Triennale III anno</h3></a>
+<table class="studgroup"><tr><th>Insegnamento</th><th>Docente</th><th> LUN </th><th> MAR </th><th> MER </th><th> GIO </th><th> VEN </th></tr><tr><td>Laboratorio di Segnali e Sistemi (A-Fa)</td><td>Vignati/Raggi</td><td></td><td>LabSS/Astro <br>15-19<br>Aula III <br>10-12</td><td>Aula I <br>8-10</td><td></td><td></td><tr><td>Laboratorio di Segnali e Sistemi (Fb-Pip)</td><td>Di Domenico</td><td>LabSS/Astro <br>15-19</td><td>Aula 4 <br>10-12</td><td>Aula 4 <br>15-17</td><td></td><td></td><tr><td>Laboratorio di Segnali e Sistemi (Piq-Z)</td><td>Felici</td><td>Aula III <br>10-12</td><td>Aula III <br>8-10</td><td>LabSS/Astro <br>15-19</td><td></td><td></td></tr><tr><td>Meccanica Quantistica (A-Fa)</td><td>Pelissetto</td><td>Aula III <br>12-14</td><td>Aula III <br>12-14</td><td>Aula III <br>10-12</td><td>Aula I <br>9-10<br><small>dal 28/09/26<br>al 04/12/26</small><br>Aula I <br>10-11</td><td></td><tr><td>Meccanica Quantistica (Fb-Pip)</td><td>Nardecchia</td><td>Cabibbo <br>11-12<br>Cabibbo <br>12-13<br><small>dal 28/09/26<br>al 04/12/26</small></td><td>Aula 4 <br>12-14</td><td>Aula 4 <br>10-12</td><td>Aula 4 <br>10-12</td><td></td><tr><td>Meccanica Quantistica (Piq-Z)</td><td>Contino</td><td>Amaldi <br>12-14</td><td></td><td>Aula 3 <br>10-12<br><small>dal 28/09/26<br>al 06/11/26</small></td><td>Aula 3 <br>10-12</td><td>Aula 4 <br>14-16</td></tr><tr><td>Meccanica Statistica (A-Fa)</td><td>Caprara</td><td>Aula III <br>14-16</td><td></td><td></td><td>Aula III <br>8-9<br>Aula III <br>9-10<br><small>dal 07/12/26<br>al 15/01/27</small></td><td>Aula III <br>15-17</td><tr><td>Meccanica Statistica (Fb-Pip)</td><td>Sciortino</td><td>Cabibbo <br>12-13<br><small>dal 07/12/26<br>al 15/01/27</small><br>Cabibbo <br>13-14</td><td></td><td>Aula III <br>13-15</td><td>Cabibbo <br>8-10</td><td></td><tr><td>Meccanica Statistica (Piq-Z)</td><td>Cammarota</td><td>Cabibbo <br>14-16</td><td>Cabibbo <br>10-12</td><td>Aula 3 <br>10-12<br><small>dal 09/11/26<br>al 15/01/27</small></td><td></td><td></td></tr><tr><td>Astrofisica</td><td>De Bernardis</td><td>Cabibbo <br>10-11</td><td>Aula 3 <br>8-10</td><td>Cabibbo <br>17-19</td><td></td><td></td></tr><tr><td>Fluidodinamica per l'Astrofisica</td><td>Graziani</td><td>Aula 4 <br>14-15</td><td>Aula I <br>15-17</td><td>Aula 4 <br>8-10</td><td></td><td></td></tr><tr><td>Meccanica Quantistica e Statistica</td><td>van Heck</td><td>Aula 4 <br>12-14</td><td>Aula 3 <br>10-12</td><td>Aula III <br>15-17</td><td>Aula 3 <br>8-10</td><td>Aula 3 <br>13-15</td></tr><tr><td>Laboratorio di Astrofisica</td><td>Battistelli</td><td>Aula III <br>16-18</td><td>Aula I <br>17-19</td><td></td><td>LabSS/Astro <br>15-19</td><td>LabSS/Astro <br>15-19</td></tr><tr><td>Introduzione alla Fisica dei Sistemi Biologici</td><td>Di Leonardo</td><td>Conversi <br>8-10</td><td></td><td></td><td></td><td>Aula 3 <br>8-11</td></tr><tr><td>Programmazione scientifica ++</td><td>De Michele</td><td></td><td>Aula 4 <br>14-15</td><td></td><td>Aula III <br>12-14</td><td>Aula III <br>17-19</td></tr><tr><td>Calcolo delle Probabilità</td><td>Paoluzzi</td><td></td><td></td><td>Aula III <br>12-13</td><td>Aula 3 <br>14-16</td><td>Aula III <br>11-13</td></tr></table>
+
+		
+			<a name=M1><h3>Magistrale I anno</h3></a>
+<table class="studgroup"><tr><th>Insegnamento</th><th>Docente</th><th> LUN </th><th> MAR </th><th> MER </th><th> GIO </th><th> VEN </th></tr><tr><td>Advanced Mathematical Methods for Physics</td><td>Crisanti</td><td></td><td>Majorana <br>14-16</td><td>Aula 8 <br>14-15</td><td>Majorana <br>17-19</td><td></td></tr><tr><td>Astrophysical Processes and Plasmas</td><td>Piacentini</td><td>Careri <br>8-10</td><td>Careri <br>16-18</td><td>Careri <br>11-12</td><td></td><td></td></tr><tr><td>Astrophysics Laboratory I</td><td>De Bernardis</td><td></td><td>Majorana <br>12-14</td><td>Careri <br>14-16</td><td></td><td>Careri <br>15-16</td></tr><tr><td>Biochemistry</td><td>Boffi</td><td>Aula 4 <br>18-19</td><td>Rasetti <br>8-10</td><td></td><td>Rasetti <br>8-10</td><td></td></tr><tr><td>Computational Biophysics</td><td>Rovigatti</td><td>Aula 8 <br>16-18</td><td></td><td></td><td></td><td>Aula 8 <br>11-14</td></tr><tr><td>Computational Solid State Physics</td><td>Boeri</td><td>Aula 17 <br>10-14</td><td></td><td></td><td>Aula 4 <br>17-19</td><td></td></tr><tr><td>Computational Statistical Mechanics</td><td>De Michele</td><td>Majorana <br>14-16</td><td>Lab. Calcolo <br>16-19</td><td></td><td></td><td>Majorana <br>14-16</td></tr><tr><td>Condensed Matter Physics (A-J)</td><td>Polimeni</td><td></td><td></td><td>Aula 3 <br>8-10</td><td>Conversi <br>12-14</td><td>Aula 3 <br>17-18</td></tr><tr><td>Condensed Matter Physics (K-Z)</td><td>Grilli</td><td></td><td></td><td>Amaldi <br>8-10</td><td>Amaldi <br>12-14</td><td>Amaldi <br>17-18</td></tr><tr><td>Fundamentals of Quantum Optics</td><td>Trotta</td><td></td><td></td><td>Majorana <br>16-18</td><td>Majorana <br>15-17</td><td>Aula 3 <br>15-17</td></tr><tr><td>General Relativity</td><td>Pani</td><td></td><td></td><td>Cabibbo <br>16-17</td><td>Aula 4 <br>8-10</td><td>Aula 4 <br>10-12</td></tr><tr><td>Group Theory in Mathematical Physics</td><td>Panati</td><td>Aula III <br>8-10</td><td>Careri <br>12-14</td><td>Aula III <br>17-18</td><td></td><td></td></tr><tr><td>Introduction to Quantum Field Theory (A-J)</td><td>Polosa</td><td>Amaldi <br>18-19</td><td>Aula 4 <br>8-10</td><td></td><td></td><td>Amaldi <br>8-10</td></tr><tr><td>Introduction to Quantum Field Theory (K-Z)</td><td>Esposito</td><td>Cabibbo <br>18-19</td><td>Cabibbo <br>8-10</td><td></td><td></td><td>Aula III <br>8-10</td></tr><tr><td>Nuclear Physics</td><td>Cunqueiro</td><td></td><td>Aula 8 <br>10-12</td><td></td><td>Aula 8 <br>14-15</td><td>Aula 8 <br>14-16</td></tr><tr><td>Computational Physics for Fundamental Interactions</td><td>Pannarale</td><td></td><td>Careri <br>14-16</td><td></td><td>Lab. Calcolo <br>15-18</td><td>Careri <br>12-14</td></tr><tr><td>Physics Laboratory I (Bio.)</td><td>Ortolani</td><td>Rasetti <br>12-13</td><td></td><td>Rasetti <br>12-14</td><td>Careri <br>10-12</td><td></td></tr><tr><td>Physics Laboratory I (Cond. Matt.)</td><td>Placidi</td><td></td><td></td><td>Conversi <br>12-14</td><td>Conversi <br>10-12</td><td>Amaldi <br>10-11</td></tr><tr><td>Physics Laboratory I (Part.)</td><td>Voena</td><td>Conversi <br>12-14</td><td></td><td>Majorana <br>12-14</td><td></td><td>Majorana <br>16-17</td></tr><tr><td>Soft and Biological Matter</td><td>Sciortino</td><td>Aula 8 <br>8-10</td><td>Rasetti <br>14-15</td><td>Aula 8 <br>10-12</td><td></td><td></td></tr><tr><td>Statistical Mechanics and Critical Phenomena</td><td>Marinari</td><td></td><td>Conversi <br>10-12</td><td>Conversi <br>14-16</td><td>Aula III <br>14-16<br><small>dal 28/09/26<br>al 13/11/26</small></td><td></td></tr><tr><td>Stellar Astrophysics</td><td>Schneider</td><td></td><td></td><td>Majorana <br>8-10</td><td>Careri <br>14-16</td><td>Careri <br>14-15</td></tr><tr><td>Statistical Inference and Biological Data Analysis</td><td>Zamponi</td><td></td><td>Conversi <br>12-14</td><td></td><td>Rasetti <br>16-19</td><td></td></tr><tr><td>Topics in Quantum Mechanics and Field Theory</td><td>Pelissetto</td><td></td><td>Majorana <br>9-10</td><td></td><td>Careri <br>12-14</td><td>Careri <br>16-18</td></tr></table>
+
+		
+			<a name=M2><h3>Magistrale II anno</h3></a>
+<table class="studgroup"><tr><th>Insegnamento</th><th>Docente</th><th> LUN </th><th> MAR </th><th> MER </th><th> GIO </th><th> VEN </th></tr><tr><td>Multimessanger and Astroparticle Physics</td><td>Di Palma</td><td>Aula 8 <br>10-12</td><td>Aula 8 <br>12-13</td><td></td><td></td><td>Aula 8 <br>9-11</td></tr><tr><td>Collider Particle Physics</td><td>Luci</td><td>Rasetti <br>13-14</td><td>Rasetti <br>17-19</td><td>Rasetti <br>10-12</td><td></td><td></td></tr><tr><td>Computing Methods for Astrophysics</td><td>De Gasperis/Graziani</td><td>Rasetti <br>9-10</td><td>Lab. Calcolo <br>8-11</td><td></td><td>Aula 8 <br>10-12</td><td></td></tr><tr><td>Theoretical Cosmology</td><td>Maoli</td><td></td><td>Aula 8 <br>16-17</td><td>Aula 8 <br>12-14</td><td></td><td>Conversi <br>8-10</td></tr><tr><td>Chemical Evolution of the Universe</td><td>Dell'Agli</td><td></td><td></td><td>Rasetti <br>8-10</td><td>Aula 8 <br>8-10</td><td>Aula 3 <br>12-13</td></tr><tr><td>Experimental Gravitation</td><td>Majorana</td><td>Aula 8 <br>12-14</td><td>Aula 8 <br>13-14</td><td>Aula 8 <br>16-18</td><td></td><td></td></tr><tr><td>Many Body Physics</td><td>Caprara</td><td>Majorana <br>17-19</td><td>Majorana <br>16-18</td><td></td><td></td><td>Aula III <br>14-15</td></tr><tr><td>Medical Applications of Physics</td><td>Saini/Patera</td><td></td><td></td><td>Rasetti <br>16-18</td><td>Rasetti <br>10-12</td><td>Rasetti <br>10-12</td></tr><tr><td>Methods of Space Astrophysics</td><td>Masi</td><td></td><td>Aula 8 <br>14-16</td><td>Aula 8 <br>15-16</td><td></td><td>Rasetti <br>14-16</td></tr><tr><td>Neutrinos and Dark Matter</td><td>Vignati</td><td>Rasetti <br>16-19</td><td></td><td></td><td>Rasetti <br>12-14</td><td></td></tr><tr><td>Observational Cosmology</td><td>Lamagna</td><td>Careri <br>16-19</td><td></td><td></td><td>Aula 8 <br>16-18</td><td></td></tr><tr><td>Phenomenology of the Standard Model</td><td>Nardecchia/Valli</td><td></td><td>Majorana <br>10-11</td><td>Rasetti <br>14-16</td><td></td><td>Conversi <br>12-14</td></tr><tr><td>Physics of Complex Systems</td><td>Loreto</td><td></td><td></td><td>Careri <br>16-19</td><td>Careri <br>16-19</td><td></td></tr><tr><td>Physics of Solids</td><td>Mauri</td><td>Majorana <br>16-17</td><td>Rasetti <br>10-12</td><td>Majorana <br>14-16</td><td></td><td></td></tr><tr><td>Quantum Field Theory</td><td>Papinutto</td><td>Careri <br>14-16</td><td></td><td></td><td>Conversi <br>14-16</td><td>Conversi <br>15-16</td></tr><tr><td>Quantum Information and Computation</td><td>Sciarrino</td><td>Careri <br>12-14</td><td></td><td>Careri <br>8-10</td><td></td><td>Careri <br>8-9</td></tr><tr><td>Semiconductor Physics and Devices</td><td>Polimeni</td><td></td><td>Aula 8 <br>8-10</td><td>Lab. Calcolo <br>12-13</td><td>Conversi <br>8-10</td><td></td></tr><tr><td>Statistical Mechanics of Disordered Systems</td><td>Ricci Tersenghi</td><td></td><td>Conversi <br>8-10</td><td>Careri <br>12-14</td><td>Careri <br>8-10</td><td></td></tr><tr><td>Statistical Physics and Machine Learning</td><td>Cammarota</td><td>Majorana <br>10-12</td><td></td><td></td><td></td><td>Majorana <br>9-12</td></tr><tr><td>Superconductivity and Superfluidity</td><td>Benfatto</td><td>Rasetti <br>10-12</td><td>Rasetti <br>12-14</td><td></td><td>Majorana <br>10-12</td><td></td></tr><tr><td>Surface Physics and Nanostructures</td><td>Betti</td><td></td><td></td><td>Majorana <br>10-12</td><td>Aula 8 <br>13-14</td><td>Majorana <br>12-14</td></tr><tr><td>Advanced Optical Techniques and Applications</td><td>Lupi/Del Re E.</td><td>Rasetti <br>14-16</td><td>Rasetti <br>15-17</td><td></td><td></td><td>Rasetti <br>16-17</td></tr><tr><td>Mathematical Statistical Field Theory</td><td>Mastropietro</td><td></td><td>Conversi <br>15-16</td><td></td><td>Majorana <br>12-14</td><td>Majorana <br>17-19</td></tr><tr><td>Advanced Computational Methods for Medical Physics</td><td>Mancini Terracciano/Giove</td><td>Careri <br>10-12</td><td>Careri <br>10-12</td><td>Careri <br>10-11</td><td></td><td></td></tr><tr><td>Theory of Stochastic Processes</td><td>Crisanti</td><td>Aula 3 <br>16-19</td><td>Aula 3 <br>18-19</td><td>Conversi <br>10-12</td><td></td><td></td></tr></table>
+
+		
+		
+		
+			<h3><a id="Amaldi"></a>Amaldi</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td><span class="T1">Analisi</span><br>(Q-Z)<sub></sub> Pinzari</td><td><span class="T1">Analisi</span><br>(Ll-P)<sub></sub> Borrelli</td><td><span class="M1">Condensed Matter Physics (K-Z) </span><br> Grilli</td><td><span class="T1">Geometria</span><br>(Ll-P)<sub></sub> Mondello</td><td><span class="M1">Introduction to Quantum Field Theory (A-J) </span><br> Polosa</td></tr>
+<tr><td>9-10</td><td><span class="T1">Analisi</span><br>(Q-Z)<sub></sub> Pinzari</td><td><span class="T1">Analisi</span><br>(Ll-P)<sub></sub> Borrelli</td><td><span class="M1">Condensed Matter Physics (K-Z) </span><br> Grilli</td><td><span class="T1">Geometria</span><br>(Ll-P)<sub></sub> Mondello</td><td><span class="M1">Introduction to Quantum Field Theory (A-J) </span><br> Polosa</td></tr>
+<tr><td>10-11</td><td><span class="T1">Geometria</span><br>(Q-Z)<sub></sub> Molcho</td><td><span class="T1">Laboratorio di Meccanica</span><br>(Ll-P)<sub></sub> Baldassarre</td><td><span class="T1">Analisi</span><br>(Q-Z)<sub></sub> Pinzari</td><td><span class="T1">Analisi</span><br>(Ll-P)<sub></sub> Borrelli</td><td><span class="M1">Physics Laboratory I (Cond. Matt.) </span><br> Placidi</td></tr>
+<tr><td>11-12</td><td><span class="T1">Geometria</span><br>(Q-Z)<sub></sub> Molcho</td><td><span class="T1">Laboratorio di Meccanica</span><br>(Ll-P)<sub></sub> Baldassarre</td><td><span class="T1">Analisi</span><br>(Q-Z)<sub></sub> Pinzari<br><small>dal 28/09/26 al 20/11/26</small><br><br><span class="T1">Geometria</span><br>(Q-Z)<sub></sub> Molcho<br><small>dal 23/11/26 al 15/01/27</small></td><td><span class="T1">Analisi</span><br>(Ll-P)<sub></sub> Borrelli</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Ll-P)<sub></sub> Monacelli</td></tr>
+<tr><td>12-13</td><td><span class="T3">Meccanica Quantistica</span><br>(Piq-Z)<sub></sub> Contino</td><td><span class="T1">Geometria</span><br>(Ll-P)<sub></sub> Mondello</td><td><span class="T1">Geometria</span><br>(Q-Z)<sub></sub> Molcho</td><td><span class="M1">Condensed Matter Physics (K-Z) </span><br> Grilli</td><td><span class="T1">Geometria</span><br>(Ll-P)<sub></sub> Mondello</td></tr>
+<tr><td>13-14</td><td><span class="T3">Meccanica Quantistica</span><br>(Piq-Z)<sub></sub> Contino</td><td><span class="T1">Geometria</span><br>(Ll-P)<sub></sub> Mondello</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Ll-P)<sub></sub> Monacelli</td><td><span class="M1">Condensed Matter Physics (K-Z) </span><br> Grilli</td><td><span class="T1">Geometria</span><br>(Ll-P)<sub></sub> Mondello</td></tr>
+<tr><td>14-15</td><td><span class="T1">Analisi</span><br>(Ll-P)<sub></sub> Borrelli</td><td><span class="T1">Analisi</span><br>(Q-Z)<sub></sub> Pinzari</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Ll-P)<sub></sub> Monacelli</td><td><span class="S">CdD/CAD </span><br> .</td><td><span class="T2">Analisi Vettoriale</span><br>(A-Di)<sub></sub> Lanzara</td></tr>
+<tr><td>15-16</td><td><span class="T1">Analisi</span><br>(Ll-P)<sub></sub> Borrelli</td><td><span class="T1">Analisi</span><br>(Q-Z)<sub></sub> Pinzari</td><td><span class="T1">Analisi</span><br>(Ll-P)<sub></sub> Borrelli</td><td><span class="S">CdD/CAD </span><br> .</td><td><span class="T2">Analisi Vettoriale</span><br>(A-Di)<sub></sub> Lanzara</td></tr>
+<tr><td>16-17</td><td><span class="T1">Laboratorio di Meccanica</span><br>(Ll-P)<sub></sub> Baldassarre</td><td><span class="T1">Geometria</span><br>(Q-Z)<sub></sub> Molcho</td><td><span class="T1">Analisi</span><br>(Ll-P)<sub></sub> Borrelli<br><small>dal 28/09/26 al 20/11/26</small><br><br><span class="T1">Geometria</span><br>(Ll-P)<sub></sub> Mondello<br><small>dal 23/11/26 al 15/01/27</small></td><td><span class="S">CdD/CAD </span><br> .</td><td></td></tr>
+<tr><td>17-18</td><td><span class="T1">Laboratorio di Meccanica</span><br>(Ll-P)<sub></sub> Baldassarre</td><td><span class="T1">Geometria</span><br>(Q-Z)<sub></sub> Molcho</td><td><span class="T1">Geometria</span><br>(Ll-P)<sub></sub> Mondello</td><td><span class="S">CdD/CAD </span><br> .</td><td><span class="M1">Condensed Matter Physics (K-Z) </span><br> Grilli</td></tr>
+<tr><td>18-19</td><td><span class="M1">Introduction to Quantum Field Theory (A-J) </span><br> Polosa</td><td></td><td></td><td><span class="S">CdD/CAD </span><br> .</td><td></td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="Cabibbo"></a>Cabibbo</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td><span class="T2">Analisi Vettoriale</span><br>(Dl-Pap)<sub></sub> De Marchis</td><td><span class="M1">Introduction to Quantum Field Theory (K-Z) </span><br> Esposito</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Q-Z)<sub></sub> Rahatlou</td><td><span class="T3">Meccanica Statistica</span><br>(Fb-Pip)<sub></sub> Sciortino</td><td></td></tr>
+<tr><td>9-10</td><td><span class="T2">Analisi Vettoriale</span><br>(Dl-Pap)<sub></sub> De Marchis</td><td><span class="M1">Introduction to Quantum Field Theory (K-Z) </span><br> Esposito</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Q-Z)<sub></sub> Rahatlou</td><td><span class="T3">Meccanica Statistica</span><br>(Fb-Pip)<sub></sub> Sciortino</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Q-Z)<sub></sub> Rahatlou</td></tr>
+<tr><td>10-11</td><td><span class="T3">Astrofisica </span><br> De Bernardis</td><td><span class="T3">Meccanica Statistica</span><br>(Piq-Z)<sub></sub> Cammarota</td><td><span class="T2">Meccanica Analitica</span><br>(Dl-Pap)<sub></sub> Papinutto</td><td><span class="T2">Meccanica Analitica</span><br>(Dl-Pap)<sub></sub> Papinutto</td><td><span class="T1">Analisi</span><br>(Q-Z)<sub></sub> Pinzari</td></tr>
+<tr><td>11-12</td><td><span class="T3">Meccanica Quantistica</span><br>(Fb-Pip)<sub></sub> Nardecchia</td><td><span class="T3">Meccanica Statistica</span><br>(Piq-Z)<sub></sub> Cammarota</td><td><span class="T2">Meccanica Analitica</span><br>(Dl-Pap)<sub></sub> Papinutto</td><td><span class="T2">Meccanica Analitica</span><br>(Dl-Pap)<sub></sub> Papinutto</td><td><span class="T1">Analisi</span><br>(Q-Z)<sub></sub> Pinzari</td></tr>
+<tr><td>12-13</td><td><span class="T3">Meccanica Quantistica</span><br>(Fb-Pip)<sub></sub> Nardecchia<br><small>dal 28/09/26 al 04/12/26</small><br><br><span class="T3">Meccanica Statistica</span><br>(Fb-Pip)<sub></sub> Sciortino<br><small>dal 07/12/26 al 15/01/27</small></td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Dl-Pap)<sub></sub> Del Re E.</td><td><span class="T2">Analisi Vettoriale</span><br>(Dl-Pap)<sub></sub> De Marchis</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Dl-Pap)<sub></sub> Mancini Terracciano</td><td></td></tr>
+<tr><td>13-14</td><td><span class="T3">Meccanica Statistica</span><br>(Fb-Pip)<sub></sub> Sciortino</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Dl-Pap)<sub></sub> Del Re E.</td><td><span class="T2">Analisi Vettoriale</span><br>(Dl-Pap)<sub></sub> De Marchis</td><td></td><td><span class="T2">Meccanica Analitica</span><br>(Dl-Pap)<sub></sub> Papinutto</td></tr>
+<tr><td>14-15</td><td><span class="T3">Meccanica Statistica</span><br>(Piq-Z)<sub></sub> Cammarota</td><td><span class="T2">Analisi Vettoriale</span><br>(Dl-Pap)<sub></sub> De Marchis</td><td><span class="T2">Meccanica Analitica</span><br>(A-Di)<sub></sub> Mastropietro</td><td><span class="T2">Meccanica Analitica</span><br>(Paq-Z)<sub></sub> Zamponi</td><td><span class="T2">Analisi Vettoriale</span><br>(Dl-Pap)<sub></sub> De Marchis</td></tr>
+<tr><td>15-16</td><td><span class="T3">Meccanica Statistica</span><br>(Piq-Z)<sub></sub> Cammarota</td><td><span class="T2">Analisi Vettoriale</span><br>(Dl-Pap)<sub></sub> De Marchis</td><td><span class="T2">Meccanica Analitica</span><br>(A-Di)<sub></sub> Mastropietro</td><td><span class="T1">Geometria</span><br>(Q-Z)<sub></sub> Molcho</td><td><span class="T2">Analisi Vettoriale</span><br>(Dl-Pap)<sub></sub> De Marchis</td></tr>
+<tr><td>16-17</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Paq-Z)<sub></sub> Marinari</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Dl-Pap)<sub></sub> Mancini Terracciano</td><td><span class="M1">General Relativity </span><br> Pani</td><td><span class="T1">Geometria</span><br>(Q-Z)<sub></sub> Molcho</td><td></td></tr>
+<tr><td>17-18</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Paq-Z)<sub></sub> Marinari</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Dl-Pap)<sub></sub> Mancini Terracciano</td><td><span class="T3">Astrofisica </span><br> De Bernardis</td><td></td><td></td></tr>
+<tr><td>18-19</td><td><span class="M1">Introduction to Quantum Field Theory (K-Z) </span><br> Esposito</td><td></td><td><span class="T3">Astrofisica </span><br> De Bernardis</td><td><span class="T2">Meccanica Analitica</span><br>(A-Di)<sub></sub> Mastropietro</td><td></td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="AulaI"></a>Aula I (edificio Caglioti di Chimica - CU032)</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td><span class="T1">Geometria</span><br>(Df-Ll)<sub></sub> Manetti</td><td><span class="T1">Laboratorio di Calcolo</span><br>(A-De)<sub></sub> Artoni</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(A-Fa)<sub></sub> Vignati/Raggi</td><td></td><td><span class="T1">Analisi</span><br>(A-De)<sub></sub> Polsiglione</td></tr>
+<tr><td>9-10</td><td><span class="T1">Geometria</span><br>(Df-Ll)<sub></sub> Manetti</td><td><span class="T1">Geometria</span><br>(A-De)<sub></sub> Spinelli</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(A-Fa)<sub></sub> Vignati/Raggi</td><td><span class="T3">Meccanica Quantistica</span><br>(A-Fa)<sub></sub> Pelissetto<br><small>dal 28/09/26 al 04/12/26</small></td><td><span class="T1">Analisi</span><br>(A-De)<sub></sub> Polsiglione</td></tr>
+<tr><td>10-11</td><td><span class="T1">Analisi</span><br>(Df-Ll)<sub></sub> Birindelli/Rossi</td><td><span class="T1">Geometria</span><br>(A-De)<sub></sub> Spinelli</td><td></td><td><span class="T3">Meccanica Quantistica</span><br>(A-Fa)<sub></sub> Pelissetto</td><td><span class="T1">Geometria</span><br>(A-De)<sub></sub> Spinelli</td></tr>
+<tr><td>11-12</td><td><span class="T1">Analisi</span><br>(Df-Ll)<sub></sub> Birindelli/Rossi</td><td><span class="T1">Analisi</span><br>(Df-Ll)<sub></sub> Birindelli/Rossi</td><td><span class="T1">Analisi</span><br>(A-De)<sub></sub> Polsiglione</td><td><span class="T1">Analisi</span><br>(Df-Ll)<sub></sub> Birindelli/Rossi</td><td><span class="T1">Geometria</span><br>(A-De)<sub></sub> Spinelli</td></tr>
+<tr><td>12-13</td><td><span class="T2">Meccanica Analitica</span><br>(A-Di)<sub></sub> Mastropietro</td><td><span class="T1">Analisi</span><br>(Df-Ll)<sub></sub> Birindelli/Rossi</td><td><span class="T1">Analisi</span><br>(A-De)<sub></sub> Polsiglione</td><td><span class="T1">Analisi</span><br>(Df-Ll)<sub></sub> Birindelli/Rossi</td><td><span class="T1">Laboratorio di Meccanica</span><br>(A-De)<sub></sub> Organtini</td></tr>
+<tr><td>13-14</td><td><span class="T2">Meccanica Analitica</span><br>(A-Di)<sub></sub> Mastropietro</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Df-Ll)<sub></sub> Boeri</td><td><span class="T1">Geometria</span><br>(A-De)<sub></sub> Spinelli</td><td><span class="T1">Geometria</span><br>(Df-Ll)<sub></sub> Manetti</td><td><span class="T1">Laboratorio di Meccanica</span><br>(A-De)<sub></sub> Organtini</td></tr>
+<tr><td>14-15</td><td><span class="T1">Analisi</span><br>(A-De)<sub></sub> Polsiglione</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Df-Ll)<sub></sub> Boeri</td><td><span class="T1">Geometria</span><br>(A-De)<sub></sub> Spinelli</td><td><span class="T1">Geometria</span><br>(Df-Ll)<sub></sub> Manetti</td><td><span class="T1">Analisi</span><br>(Df-Ll)<sub></sub> Birindelli/Rossi</td></tr>
+<tr><td>15-16</td><td><span class="T1">Analisi</span><br>(A-De)<sub></sub> Polsiglione<br><small>dal 28/09/26 al 20/11/26</small><br><br><span class="T1">Geometria</span><br>(A-De)<sub></sub> Spinelli<br><small>dal 23/11/26 al 15/01/27</small></td><td><span class="T3">Fluidodinamica per l'Astrofisica </span><br> Graziani</td><td></td><td><span class="T1">Analisi</span><br>(A-De)<sub></sub> Polsiglione</td><td><span class="T1">Analisi</span><br>(Df-Ll)<sub></sub> Birindelli/Rossi<br><small>dal 28/09/26 al 13/11/26</small><br><br><span class="T1">Geometria</span><br>(Df-Ll)<sub></sub> Manetti<br><small>dal 16/11/26 al 15/01/27</small></td></tr>
+<tr><td>16-17</td><td><span class="T1">Geometria</span><br>(A-De)<sub></sub> Spinelli</td><td><span class="T3">Fluidodinamica per l'Astrofisica </span><br> Graziani</td><td><span class="T1">Geometria</span><br>(Df-Ll)<sub></sub> Manetti</td><td><span class="T1">Analisi</span><br>(A-De)<sub></sub> Polsiglione</td><td><span class="T1">Geometria</span><br>(Df-Ll)<sub></sub> Manetti</td></tr>
+<tr><td>17-18</td><td><span class="T1">Laboratorio di Calcolo</span><br>(A-De)<sub></sub> Artoni</td><td><span class="T3">Laboratorio di Astrofisica </span><br> Battistelli</td><td><span class="T1">Geometria</span><br>(Df-Ll)<sub></sub> Manetti</td><td><span class="T1">Laboratorio di Meccanica</span><br>(A-De)<sub></sub> Organtini</td><td></td></tr>
+<tr><td>18-19</td><td><span class="T1">Laboratorio di Calcolo</span><br>(A-De)<sub></sub> Artoni</td><td><span class="T3">Laboratorio di Astrofisica </span><br> Battistelli</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Df-Ll)<sub></sub> Boeri</td><td><span class="T1">Laboratorio di Meccanica</span><br>(A-De)<sub></sub> Organtini</td><td></td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="Conversi"></a>Conversi</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td><span class="T3">Introduzione alla Fisica dei Sistemi Biologici </span><br> Di Leonardo</td><td><span class="M2">Statistical Mechanics of Disordered Systems </span><br> Ricci Tersenghi</td><td></td><td><span class="M2">Semiconductor Physics and Devices </span><br> Polimeni</td><td><span class="M2">Theoretical Cosmology </span><br> Maoli</td></tr>
+<tr><td>9-10</td><td><span class="T3">Introduzione alla Fisica dei Sistemi Biologici </span><br> Di Leonardo</td><td><span class="M2">Statistical Mechanics of Disordered Systems </span><br> Ricci Tersenghi</td><td></td><td><span class="M2">Semiconductor Physics and Devices </span><br> Polimeni</td><td><span class="M2">Theoretical Cosmology </span><br> Maoli</td></tr>
+<tr><td>10-11</td><td></td><td><span class="M1">Statistical Mechanics and Critical Phenomena </span><br> Marinari</td><td><span class="M2">Theory of Stochastic Processes </span><br> Crisanti</td><td><span class="M1">Physics Laboratory I (Cond. Matt.) </span><br> Placidi</td><td></td></tr>
+<tr><td>11-12</td><td></td><td><span class="M1">Statistical Mechanics and Critical Phenomena </span><br> Marinari</td><td><span class="M2">Theory of Stochastic Processes </span><br> Crisanti</td><td><span class="M1">Physics Laboratory I (Cond. Matt.) </span><br> Placidi</td><td></td></tr>
+<tr><td>12-13</td><td><span class="M1">Physics Laboratory I (Part.) </span><br> Voena</td><td><span class="M1">Statistical Inference and Biological Data Analysis </span><br> Zamponi</td><td><span class="M1">Physics Laboratory I (Cond. Matt.) </span><br> Placidi</td><td><span class="M1">Condensed Matter Physics (A-J) </span><br> Polimeni</td><td><span class="M2">Phenomenology of the Standard Model </span><br> Nardecchia/Valli</td></tr>
+<tr><td>13-14</td><td><span class="M1">Physics Laboratory I (Part.) </span><br> Voena</td><td><span class="M1">Statistical Inference and Biological Data Analysis </span><br> Zamponi</td><td><span class="M1">Physics Laboratory I (Cond. Matt.) </span><br> Placidi</td><td><span class="M1">Condensed Matter Physics (A-J) </span><br> Polimeni</td><td><span class="M2">Phenomenology of the Standard Model </span><br> Nardecchia/Valli</td></tr>
+<tr><td>14-15</td><td><span class="S">Seminari </span><br> .</td><td></td><td><span class="M1">Statistical Mechanics and Critical Phenomena </span><br> Marinari</td><td><span class="M2">Quantum Field Theory </span><br> Papinutto</td><td></td></tr>
+<tr><td>15-16</td><td><span class="S">Seminari </span><br> .</td><td><span class="M2">Mathematical Statistical Field Theory </span><br> Mastropietro</td><td><span class="M1">Statistical Mechanics and Critical Phenomena </span><br> Marinari</td><td><span class="M2">Quantum Field Theory </span><br> Papinutto</td><td><span class="M2">Quantum Field Theory </span><br> Papinutto</td></tr>
+<tr><td>16-17</td><td><span class="S">Seminari </span><br> .</td><td><span class="S">Seminari </span><br> .</td><td><span class="S">Seminari </span><br> .</td><td><span class="S">Seminari </span><br> .</td><td><span class="S">Seminari </span><br> .</td></tr>
+<tr><td>17-18</td><td><span class="S">Seminari </span><br> .</td><td><span class="S">Seminari </span><br> .</td><td><span class="S">Seminari </span><br> .</td><td><span class="S">Seminari </span><br> .</td><td><span class="S">Seminari </span><br> .</td></tr>
+<tr><td>18-19</td><td><span class="S">Seminari </span><br> .</td><td><span class="S">Seminari </span><br> .</td><td><span class="S">Seminari </span><br> .</td><td><span class="S">Seminari </span><br> .</td><td><span class="S">Seminari </span><br> .</td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="Rasetti"></a>Rasetti</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td></td><td><span class="M1">Biochemistry </span><br> Boffi</td><td><span class="M2">Chemical Evolution of the Universe </span><br> Dell'Agli</td><td><span class="M1">Biochemistry </span><br> Boffi</td><td></td></tr>
+<tr><td>9-10</td><td><span class="M2">Computing Methods for Astrophysics </span><br> De Gasperis/Graziani</td><td><span class="M1">Biochemistry </span><br> Boffi</td><td><span class="M2">Chemical Evolution of the Universe </span><br> Dell'Agli</td><td><span class="M1">Biochemistry </span><br> Boffi</td><td></td></tr>
+<tr><td>10-11</td><td><span class="M2">Superconductivity and Superfluidity </span><br> Benfatto</td><td><span class="M2">Physics of Solids </span><br> Mauri</td><td><span class="M2">Collider Particle Physics </span><br> Luci</td><td><span class="M2">Medical Applications of Physics </span><br> Saini/Patera</td><td><span class="M2">Medical Applications of Physics </span><br> Saini/Patera</td></tr>
+<tr><td>11-12</td><td><span class="M2">Superconductivity and Superfluidity </span><br> Benfatto</td><td><span class="M2">Physics of Solids </span><br> Mauri</td><td><span class="M2">Collider Particle Physics </span><br> Luci</td><td><span class="M2">Medical Applications of Physics </span><br> Saini/Patera</td><td><span class="M2">Medical Applications of Physics </span><br> Saini/Patera</td></tr>
+<tr><td>12-13</td><td><span class="M1">Physics Laboratory I (Bio.) </span><br> Ortolani</td><td><span class="M2">Superconductivity and Superfluidity </span><br> Benfatto</td><td><span class="M1">Physics Laboratory I (Bio.) </span><br> Ortolani</td><td><span class="M2">Neutrinos and Dark Matter </span><br> Vignati</td><td></td></tr>
+<tr><td>13-14</td><td><span class="M2">Collider Particle Physics </span><br> Luci</td><td><span class="M2">Superconductivity and Superfluidity </span><br> Benfatto</td><td><span class="M1">Physics Laboratory I (Bio.) </span><br> Ortolani</td><td><span class="M2">Neutrinos and Dark Matter </span><br> Vignati</td><td></td></tr>
+<tr><td>14-15</td><td><span class="M2">Advanced Optical Techniques and Applications </span><br> Lupi/Del Re E.</td><td><span class="M1">Soft and Biological Matter </span><br> Sciortino</td><td><span class="M2">Phenomenology of the Standard Model </span><br> Nardecchia/Valli</td><td></td><td><span class="M2">Methods of Space Astrophysics </span><br> Masi</td></tr>
+<tr><td>15-16</td><td><span class="M2">Advanced Optical Techniques and Applications </span><br> Lupi/Del Re E.</td><td><span class="M2">Advanced Optical Techniques and Applications </span><br> Lupi/Del Re E.</td><td><span class="M2">Phenomenology of the Standard Model </span><br> Nardecchia/Valli</td><td></td><td><span class="M2">Methods of Space Astrophysics </span><br> Masi</td></tr>
+<tr><td>16-17</td><td><span class="M2">Neutrinos and Dark Matter </span><br> Vignati</td><td><span class="M2">Advanced Optical Techniques and Applications </span><br> Lupi/Del Re E.</td><td><span class="M2">Medical Applications of Physics </span><br> Saini/Patera</td><td><span class="M1">Statistical Inference and Biological Data Analysis </span><br> Zamponi</td><td><span class="M2">Advanced Optical Techniques and Applications </span><br> Lupi/Del Re E.</td></tr>
+<tr><td>17-18</td><td><span class="M2">Neutrinos and Dark Matter </span><br> Vignati</td><td><span class="M2">Collider Particle Physics </span><br> Luci</td><td><span class="M2">Medical Applications of Physics </span><br> Saini/Patera</td><td><span class="M1">Statistical Inference and Biological Data Analysis </span><br> Zamponi</td><td></td></tr>
+<tr><td>18-19</td><td><span class="M2">Neutrinos and Dark Matter </span><br> Vignati</td><td><span class="M2">Collider Particle Physics </span><br> Luci</td><td></td><td><span class="M1">Statistical Inference and Biological Data Analysis </span><br> Zamponi</td><td></td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="Careri"></a>Careri</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td><span class="M1">Astrophysical Processes and Plasmas </span><br> Piacentini</td><td></td><td><span class="M2">Quantum Information and Computation </span><br> Sciarrino</td><td><span class="M2">Statistical Mechanics of Disordered Systems </span><br> Ricci Tersenghi</td><td><span class="M2">Quantum Information and Computation </span><br> Sciarrino</td></tr>
+<tr><td>9-10</td><td><span class="M1">Astrophysical Processes and Plasmas </span><br> Piacentini</td><td></td><td><span class="M2">Quantum Information and Computation </span><br> Sciarrino</td><td><span class="M2">Statistical Mechanics of Disordered Systems </span><br> Ricci Tersenghi</td><td></td></tr>
+<tr><td>10-11</td><td><span class="M2">Advanced Computational Methods for Medical Physics </span><br> Mancini Terracciano/Giove</td><td><span class="M2">Advanced Computational Methods for Medical Physics </span><br> Mancini Terracciano/Giove</td><td><span class="M2">Advanced Computational Methods for Medical Physics </span><br> Mancini Terracciano/Giove</td><td><span class="M1">Physics Laboratory I (Bio.) </span><br> Ortolani</td><td></td></tr>
+<tr><td>11-12</td><td><span class="M2">Advanced Computational Methods for Medical Physics </span><br> Mancini Terracciano/Giove</td><td><span class="M2">Advanced Computational Methods for Medical Physics </span><br> Mancini Terracciano/Giove</td><td><span class="M1">Astrophysical Processes and Plasmas </span><br> Piacentini</td><td><span class="M1">Physics Laboratory I (Bio.) </span><br> Ortolani</td><td></td></tr>
+<tr><td>12-13</td><td><span class="M2">Quantum Information and Computation </span><br> Sciarrino</td><td><span class="M1">Group Theory in Mathematical Physics </span><br> Panati</td><td><span class="M2">Statistical Mechanics of Disordered Systems </span><br> Ricci Tersenghi</td><td><span class="M1">Topics in Quantum Mechanics and Field Theory </span><br> Pelissetto</td><td><span class="M1">Computational Physics for Fundamental Interactions </span><br> Pannarale</td></tr>
+<tr><td>13-14</td><td><span class="M2">Quantum Information and Computation </span><br> Sciarrino</td><td><span class="M1">Group Theory in Mathematical Physics </span><br> Panati</td><td><span class="M2">Statistical Mechanics of Disordered Systems </span><br> Ricci Tersenghi</td><td><span class="M1">Topics in Quantum Mechanics and Field Theory </span><br> Pelissetto</td><td><span class="M1">Computational Physics for Fundamental Interactions </span><br> Pannarale</td></tr>
+<tr><td>14-15</td><td><span class="M2">Quantum Field Theory </span><br> Papinutto</td><td><span class="M1">Computational Physics for Fundamental Interactions </span><br> Pannarale</td><td><span class="M1">Astrophysics Laboratory I </span><br> De Bernardis</td><td><span class="M1">Stellar Astrophysics </span><br> Schneider</td><td><span class="M1">Stellar Astrophysics </span><br> Schneider</td></tr>
+<tr><td>15-16</td><td><span class="M2">Quantum Field Theory </span><br> Papinutto</td><td><span class="M1">Computational Physics for Fundamental Interactions </span><br> Pannarale</td><td><span class="M1">Astrophysics Laboratory I </span><br> De Bernardis</td><td><span class="M1">Stellar Astrophysics </span><br> Schneider</td><td><span class="M1">Astrophysics Laboratory I </span><br> De Bernardis</td></tr>
+<tr><td>16-17</td><td><span class="M2">Observational Cosmology </span><br> Lamagna</td><td><span class="M1">Astrophysical Processes and Plasmas </span><br> Piacentini</td><td><span class="M2">Physics of Complex Systems </span><br> Loreto</td><td><span class="M2">Physics of Complex Systems </span><br> Loreto</td><td><span class="M1">Topics in Quantum Mechanics and Field Theory </span><br> Pelissetto</td></tr>
+<tr><td>17-18</td><td><span class="M2">Observational Cosmology </span><br> Lamagna</td><td><span class="M1">Astrophysical Processes and Plasmas </span><br> Piacentini</td><td><span class="M2">Physics of Complex Systems </span><br> Loreto</td><td><span class="M2">Physics of Complex Systems </span><br> Loreto</td><td><span class="M1">Topics in Quantum Mechanics and Field Theory </span><br> Pelissetto</td></tr>
+<tr><td>18-19</td><td><span class="M2">Observational Cosmology </span><br> Lamagna</td><td></td><td><span class="M2">Physics of Complex Systems </span><br> Loreto</td><td><span class="M2">Physics of Complex Systems </span><br> Loreto</td><td></td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="LabSS-LabAstro"></a>Laboratorio di Sistemi e Segnali e Astrofisica</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>9-10</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>10-11</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-12</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>12-13</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>13-14</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>14-15</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>15-16</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Fb-Pip)<sub></sub> Di Domenico</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(A-Fa)<sub></sub> Vignati/Raggi</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Piq-Z)<sub></sub> Felici</td><td><span class="T3">Laboratorio di Astrofisica </span><br> Battistelli</td><td><span class="T3">Laboratorio di Astrofisica </span><br> Battistelli</td></tr>
+<tr><td>16-17</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Fb-Pip)<sub></sub> Di Domenico</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(A-Fa)<sub></sub> Vignati/Raggi</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Piq-Z)<sub></sub> Felici</td><td><span class="T3">Laboratorio di Astrofisica </span><br> Battistelli</td><td><span class="T3">Laboratorio di Astrofisica </span><br> Battistelli</td></tr>
+<tr><td>17-18</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Fb-Pip)<sub></sub> Di Domenico</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(A-Fa)<sub></sub> Vignati/Raggi</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Piq-Z)<sub></sub> Felici</td><td><span class="T3">Laboratorio di Astrofisica </span><br> Battistelli</td><td><span class="T3">Laboratorio di Astrofisica </span><br> Battistelli</td></tr>
+<tr><td>18-19</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Fb-Pip)<sub></sub> Di Domenico</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(A-Fa)<sub></sub> Vignati/Raggi</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Piq-Z)<sub></sub> Felici</td><td><span class="T3">Laboratorio di Astrofisica </span><br> Battistelli</td><td><span class="T3">Laboratorio di Astrofisica </span><br> Battistelli</td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="Aula3"></a>Aula 3 “Nella Mortara”</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td></td><td><span class="T3">Astrofisica </span><br> De Bernardis</td><td><span class="M1">Condensed Matter Physics (A-J) </span><br> Polimeni</td><td><span class="T3">Meccanica Quantistica e Statistica </span><br> van Heck</td><td><span class="T3">Introduzione alla Fisica dei Sistemi Biologici </span><br> Di Leonardo</td></tr>
+<tr><td>9-10</td><td></td><td><span class="T3">Astrofisica </span><br> De Bernardis</td><td><span class="M1">Condensed Matter Physics (A-J) </span><br> Polimeni</td><td><span class="T3">Meccanica Quantistica e Statistica </span><br> van Heck</td><td><span class="T3">Introduzione alla Fisica dei Sistemi Biologici </span><br> Di Leonardo</td></tr>
+<tr><td>10-11</td><td></td><td><span class="T3">Meccanica Quantistica e Statistica </span><br> van Heck</td><td><span class="T3">Meccanica Quantistica</span><br>(Piq-Z)<sub></sub> Contino<br><small>dal 28/09/26 al 06/11/26</small><br><br><span class="T3">Meccanica Statistica</span><br>(Piq-Z)<sub></sub> Cammarota<br><small>dal 09/11/26 al 15/01/27</small></td><td><span class="T3">Meccanica Quantistica</span><br>(Piq-Z)<sub></sub> Contino</td><td><span class="T3">Introduzione alla Fisica dei Sistemi Biologici </span><br> Di Leonardo</td></tr>
+<tr><td>11-12</td><td><span class="T2">Analisi Vettoriale</span><br>(Paq-Z)<sub></sub> Terracina</td><td><span class="T3">Meccanica Quantistica e Statistica </span><br> van Heck</td><td><span class="T3">Meccanica Quantistica</span><br>(Piq-Z)<sub></sub> Contino<br><small>dal 28/09/26 al 06/11/26</small><br><br><span class="T3">Meccanica Statistica</span><br>(Piq-Z)<sub></sub> Cammarota<br><small>dal 09/11/26 al 15/01/27</small></td><td><span class="T3">Meccanica Quantistica</span><br>(Piq-Z)<sub></sub> Contino</td><td></td></tr>
+<tr><td>12-13</td><td><span class="T2">Analisi Vettoriale</span><br>(Paq-Z)<sub></sub> Terracina</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Paq-Z)<sub></sub> Del Re D.</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(A-Di)<sub></sub> Santanastasio<br><small>dal 05/10/26 al 15/01/27</small></td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Paq-Z)<sub></sub> Del Re D.</td><td><span class="M2">Chemical Evolution of the Universe </span><br> Dell'Agli</td></tr>
+<tr><td>13-14</td><td><span class="T2">Meccanica Analitica</span><br>(Paq-Z)<sub></sub> Zamponi</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Paq-Z)<sub></sub> Del Re D.</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(A-Di)<sub></sub> Santanastasio<br><small>dal 05/10/26 al 15/01/27</small></td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Paq-Z)<sub></sub> Del Re D.</td><td><span class="T3">Meccanica Quantistica e Statistica </span><br> van Heck</td></tr>
+<tr><td>14-15</td><td><span class="T2">Meccanica Analitica</span><br>(Paq-Z)<sub></sub> Zamponi</td><td><span class="T2">Meccanica Analitica</span><br>(Paq-Z)<sub></sub> Zamponi</td><td></td><td><span class="T3">Calcolo delle Probabilità </span><br> Paoluzzi</td><td><span class="T3">Meccanica Quantistica e Statistica </span><br> van Heck</td></tr>
+<tr><td>15-16</td><td></td><td><span class="T2">Meccanica Analitica</span><br>(Paq-Z)<sub></sub> Zamponi</td><td><span class="T2">Analisi Vettoriale</span><br>(Paq-Z)<sub></sub> Terracina</td><td><span class="T3">Calcolo delle Probabilità </span><br> Paoluzzi</td><td><span class="M1">Fundamentals of Quantum Optics </span><br> Trotta</td></tr>
+<tr><td>16-17</td><td><span class="M2">Theory of Stochastic Processes </span><br> Crisanti</td><td><span class="T2">Analisi Vettoriale</span><br>(Paq-Z)<sub></sub> Terracina</td><td><span class="T2">Analisi Vettoriale</span><br>(Paq-Z)<sub></sub> Terracina</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(A-Di)<sub></sub> Santanastasio</td><td><span class="M1">Fundamentals of Quantum Optics </span><br> Trotta</td></tr>
+<tr><td>17-18</td><td><span class="M2">Theory of Stochastic Processes </span><br> Crisanti</td><td><span class="T2">Analisi Vettoriale</span><br>(Paq-Z)<sub></sub> Terracina</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Paq-Z)<sub></sub> Marinari</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(A-Di)<sub></sub> Santanastasio</td><td><span class="M1">Condensed Matter Physics (A-J) </span><br> Polimeni</td></tr>
+<tr><td>18-19</td><td><span class="M2">Theory of Stochastic Processes </span><br> Crisanti</td><td><span class="M2">Theory of Stochastic Processes </span><br> Crisanti</td><td></td><td></td><td></td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="Aula4"></a>Aula 4 “Giustina Baroni”</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td><span class="T2">Analisi Vettoriale</span><br>(A-Di)<sub></sub> Lanzara</td><td><span class="M1">Introduction to Quantum Field Theory (A-J) </span><br> Polosa</td><td><span class="T3">Fluidodinamica per l'Astrofisica </span><br> Graziani</td><td><span class="M1">General Relativity </span><br> Pani</td><td></td></tr>
+<tr><td>9-10</td><td><span class="T2">Analisi Vettoriale</span><br>(A-Di)<sub></sub> Lanzara</td><td><span class="M1">Introduction to Quantum Field Theory (A-J) </span><br> Polosa</td><td><span class="T3">Fluidodinamica per l'Astrofisica </span><br> Graziani</td><td><span class="M1">General Relativity </span><br> Pani</td><td></td></tr>
+<tr><td>10-11</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(A-Di)<sub></sub> Rovigatti</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Fb-Pip)<sub></sub> Di Domenico</td><td><span class="T3">Meccanica Quantistica</span><br>(Fb-Pip)<sub></sub> Nardecchia</td><td><span class="T3">Meccanica Quantistica</span><br>(Fb-Pip)<sub></sub> Nardecchia</td><td><span class="M1">General Relativity </span><br> Pani</td></tr>
+<tr><td>11-12</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(A-Di)<sub></sub> Rovigatti</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Fb-Pip)<sub></sub> Di Domenico</td><td><span class="T3">Meccanica Quantistica</span><br>(Fb-Pip)<sub></sub> Nardecchia</td><td><span class="T3">Meccanica Quantistica</span><br>(Fb-Pip)<sub></sub> Nardecchia</td><td><span class="M1">General Relativity </span><br> Pani</td></tr>
+<tr><td>12-13</td><td><span class="T3">Meccanica Quantistica e Statistica </span><br> van Heck</td><td><span class="T3">Meccanica Quantistica</span><br>(Fb-Pip)<sub></sub> Nardecchia</td><td></td><td><span class="T1">Laboratorio di Meccanica</span><br>(Q-Z)<sub></sub> Piacentini</td><td><span class="T1">Laboratorio di Meccanica</span><br>(Df-Ll)<sub></sub> De Cecco</td></tr>
+<tr><td>13-14</td><td><span class="T3">Meccanica Quantistica e Statistica </span><br> van Heck</td><td><span class="T3">Meccanica Quantistica</span><br>(Fb-Pip)<sub></sub> Nardecchia</td><td><span class="T1">Laboratorio di Meccanica</span><br>(Q-Z)<sub></sub> Piacentini</td><td><span class="T1">Laboratorio di Meccanica</span><br>(Q-Z)<sub></sub> Piacentini</td><td><span class="T1">Laboratorio di Meccanica</span><br>(Df-Ll)<sub></sub> De Cecco</td></tr>
+<tr><td>14-15</td><td><span class="T3">Fluidodinamica per l'Astrofisica </span><br> Graziani</td><td><span class="T3">Programmazione scientifica ++ </span><br> De Michele</td><td><span class="T1">Laboratorio di Meccanica</span><br>(Q-Z)<sub></sub> Piacentini</td><td></td><td><span class="T3">Meccanica Quantistica</span><br>(Piq-Z)<sub></sub> Contino</td></tr>
+<tr><td>15-16</td><td></td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(A-Di)<sub></sub> Rovigatti</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Fb-Pip)<sub></sub> Di Domenico</td><td><span class="T1">Laboratorio di Meccanica</span><br>(Df-Ll)<sub></sub> De Cecco</td><td><span class="T3">Meccanica Quantistica</span><br>(Piq-Z)<sub></sub> Contino</td></tr>
+<tr><td>16-17</td><td></td><td><span class="T2">Analisi Vettoriale</span><br>(A-Di)<sub></sub> Lanzara</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Fb-Pip)<sub></sub> Di Domenico</td><td><span class="T1">Laboratorio di Meccanica</span><br>(Df-Ll)<sub></sub> De Cecco</td><td><span class="T2">Analisi Vettoriale</span><br>(Paq-Z)<sub></sub> Terracina</td></tr>
+<tr><td>17-18</td><td></td><td><span class="T2">Analisi Vettoriale</span><br>(A-Di)<sub></sub> Lanzara</td><td><span class="T2">Analisi Vettoriale</span><br>(A-Di)<sub></sub> Lanzara</td><td><span class="M1">Computational Solid State Physics </span><br> Boeri</td><td><span class="T2">Analisi Vettoriale</span><br>(Paq-Z)<sub></sub> Terracina</td></tr>
+<tr><td>18-19</td><td><span class="M1">Biochemistry </span><br> Boffi</td><td></td><td><span class="T2">Analisi Vettoriale</span><br>(A-Di)<sub></sub> Lanzara</td><td><span class="M1">Computational Solid State Physics </span><br> Boeri</td><td></td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="Aula8"></a>Aula 8</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td><span class="M1">Soft and Biological Matter </span><br> Sciortino</td><td><span class="M2">Semiconductor Physics and Devices </span><br> Polimeni</td><td></td><td><span class="M2">Chemical Evolution of the Universe </span><br> Dell'Agli</td><td></td></tr>
+<tr><td>9-10</td><td><span class="M1">Soft and Biological Matter </span><br> Sciortino</td><td><span class="M2">Semiconductor Physics and Devices </span><br> Polimeni</td><td></td><td><span class="M2">Chemical Evolution of the Universe </span><br> Dell'Agli</td><td><span class="M2">Multimessanger and Astroparticle Physics </span><br> Di Palma</td></tr>
+<tr><td>10-11</td><td><span class="M2">Multimessanger and Astroparticle Physics </span><br> Di Palma</td><td><span class="M1">Nuclear Physics </span><br> Cunqueiro</td><td><span class="M1">Soft and Biological Matter </span><br> Sciortino</td><td><span class="M2">Computing Methods for Astrophysics </span><br> De Gasperis/Graziani</td><td><span class="M2">Multimessanger and Astroparticle Physics </span><br> Di Palma</td></tr>
+<tr><td>11-12</td><td><span class="M2">Multimessanger and Astroparticle Physics </span><br> Di Palma</td><td><span class="M1">Nuclear Physics </span><br> Cunqueiro</td><td><span class="M1">Soft and Biological Matter </span><br> Sciortino</td><td><span class="M2">Computing Methods for Astrophysics </span><br> De Gasperis/Graziani</td><td><span class="M1">Computational Biophysics </span><br> Rovigatti</td></tr>
+<tr><td>12-13</td><td><span class="M2">Experimental Gravitation </span><br> Majorana</td><td><span class="M2">Multimessanger and Astroparticle Physics </span><br> Di Palma</td><td><span class="M2">Theoretical Cosmology </span><br> Maoli</td><td></td><td><span class="M1">Computational Biophysics </span><br> Rovigatti</td></tr>
+<tr><td>13-14</td><td><span class="M2">Experimental Gravitation </span><br> Majorana</td><td><span class="M2">Experimental Gravitation </span><br> Majorana</td><td><span class="M2">Theoretical Cosmology </span><br> Maoli</td><td><span class="M2">Surface Physics and Nanostructures </span><br> Betti</td><td><span class="M1">Computational Biophysics </span><br> Rovigatti</td></tr>
+<tr><td>14-15</td><td></td><td><span class="M2">Methods of Space Astrophysics </span><br> Masi</td><td><span class="M1">Advanced Mathematical Methods for Physics </span><br> Crisanti</td><td><span class="M1">Nuclear Physics </span><br> Cunqueiro</td><td><span class="M1">Nuclear Physics </span><br> Cunqueiro</td></tr>
+<tr><td>15-16</td><td></td><td><span class="M2">Methods of Space Astrophysics </span><br> Masi</td><td><span class="M2">Methods of Space Astrophysics </span><br> Masi</td><td></td><td><span class="M1">Nuclear Physics </span><br> Cunqueiro</td></tr>
+<tr><td>16-17</td><td><span class="M1">Computational Biophysics </span><br> Rovigatti</td><td><span class="M2">Theoretical Cosmology </span><br> Maoli</td><td><span class="M2">Experimental Gravitation </span><br> Majorana</td><td><span class="M2">Observational Cosmology </span><br> Lamagna</td><td></td></tr>
+<tr><td>17-18</td><td><span class="M1">Computational Biophysics </span><br> Rovigatti</td><td></td><td><span class="M2">Experimental Gravitation </span><br> Majorana</td><td><span class="M2">Observational Cosmology </span><br> Lamagna</td><td></td></tr>
+<tr><td>18-19</td><td></td><td></td><td></td><td></td><td></td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="LabCalc"></a>Sala Calcolo</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td></td><td><span class="M2">Computing Methods for Astrophysics </span><br> De Gasperis/Graziani</td><td></td><td></td><td></td></tr>
+<tr><td>9-10</td><td></td><td><span class="M2">Computing Methods for Astrophysics </span><br> De Gasperis/Graziani</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Ll-P)<sub>a</sub> Monacelli<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(Q-Z)<sub>b</sub> Rahatlou<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Dl-Pap)<sub>c</sub> Mancini Terracciano</td></tr>
+<tr><td>10-11</td><td><span class="T1">Laboratorio di Calcolo</span><br>(A-De)<sub>a</sub> Artoni<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="M2">Computing Methods for Astrophysics </span><br> De Gasperis/Graziani</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Ll-P)<sub>a</sub> Monacelli<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(Q-Z)<sub>b</sub> Rahatlou<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Dl-Pap)<sub>c</sub> Mancini Terracciano</td></tr>
+<tr><td>11-12</td><td><span class="T1">Laboratorio di Calcolo</span><br>(A-De)<sub>a</sub> Artoni<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(A-De)<sub>b</sub> Artoni<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(Ll-P)<sub>a</sub> Monacelli<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(Q-Z)<sub>b</sub> Rahatlou<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Dl-Pap)<sub>c</sub> Mancini Terracciano</td></tr>
+<tr><td>12-13</td><td><span class="T1">Laboratorio di Calcolo</span><br>(A-De)<sub>a</sub> Artoni<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(A-De)<sub>b</sub> Artoni<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="M2">Semiconductor Physics and Devices </span><br> Polimeni</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Ll-P)<sub>b</sub> Monacelli<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(Q-Z)<sub>c</sub> Rahatlou<br><small>dal 12/10/26 al 15/01/27</small></td></tr>
+<tr><td>13-14</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Q-Z)<sub>a</sub> Rahatlou<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(A-De)<sub>b</sub> Artoni<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(Df-Ll)<sub>c</sub> Boeri<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(Ll-P)<sub>b</sub> Monacelli<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(Q-Z)<sub>c</sub> Rahatlou<br><small>dal 12/10/26 al 15/01/27</small></td></tr>
+<tr><td>14-15</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Q-Z)<sub>a</sub> Rahatlou<br><small>dal 12/10/26 al 15/01/27</small></td><td></td><td><span class="T1">Laboratorio di Calcolo</span><br>(Df-Ll)<sub>c</sub> Boeri<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(Ll-P)<sub>b</sub> Monacelli<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="T1">Laboratorio di Calcolo</span><br>(Q-Z)<sub>c</sub> Rahatlou<br><small>dal 12/10/26 al 15/01/27</small></td></tr>
+<tr><td>15-16</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Q-Z)<sub>a</sub> Rahatlou<br><small>dal 12/10/26 al 15/01/27</small></td><td></td><td><span class="T1">Laboratorio di Calcolo</span><br>(Df-Ll)<sub>c</sub> Boeri<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="M1">Computational Physics for Fundamental Interactions </span><br> Pannarale</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Ll-P)<sub>c</sub> Monacelli<br><small>dal 12/10/26 al 15/01/27</small></td></tr>
+<tr><td>16-17</td><td></td><td><span class="M1">Computational Statistical Mechanics </span><br> De Michele</td><td><span class="T1">Laboratorio di Calcolo</span><br>(A-De)<sub>c</sub> Artoni<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="M1">Computational Physics for Fundamental Interactions </span><br> Pannarale</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Ll-P)<sub>c</sub> Monacelli<br><small>dal 12/10/26 al 15/01/27</small></td></tr>
+<tr><td>17-18</td><td></td><td><span class="M1">Computational Statistical Mechanics </span><br> De Michele</td><td><span class="T1">Laboratorio di Calcolo</span><br>(A-De)<sub>c</sub> Artoni<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="M1">Computational Physics for Fundamental Interactions </span><br> Pannarale</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Ll-P)<sub>c</sub> Monacelli<br><small>dal 12/10/26 al 15/01/27</small></td></tr>
+<tr><td>18-19</td><td></td><td><span class="M1">Computational Statistical Mechanics </span><br> De Michele</td><td><span class="T1">Laboratorio di Calcolo</span><br>(A-De)<sub>c</sub> Artoni<br><small>dal 12/10/26 al 15/01/27</small></td><td></td><td></td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="Aula17"></a>Aula 17 (Laboratori di Via Tiburtina – RM025)</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Df-Ll)<sub>b</sub> Boeri<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="S">Altri Corsi INF </span><br> .</td><td></td><td><span class="S">Altri Corsi INF </span><br> .</td></tr>
+<tr><td>9-10</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Df-Ll)<sub>b</sub> Boeri<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Paq-Z)<sub>a</sub> Marinari</td><td><span class="S">Altri Corsi INF </span><br> .</td></tr>
+<tr><td>10-11</td><td><span class="M1">Computational Solid State Physics </span><br> Boeri</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Df-Ll)<sub>b</sub> Boeri<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Paq-Z)<sub>a</sub> Marinari</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Dl-Pap)<sub>b</sub> Mancini Terracciano</td></tr>
+<tr><td>11-12</td><td><span class="M1">Computational Solid State Physics </span><br> Boeri</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Paq-Z)<sub>a</sub> Marinari</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Dl-Pap)<sub>b</sub> Mancini Terracciano</td></tr>
+<tr><td>12-13</td><td><span class="M1">Computational Solid State Physics </span><br> Boeri</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="S">Altri Corsi INF </span><br> .</td><td></td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Dl-Pap)<sub>b</sub> Mancini Terracciano</td></tr>
+<tr><td>13-14</td><td><span class="M1">Computational Solid State Physics </span><br> Boeri</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(A-Di)<sub>a</sub> Rovigatti</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Paq-Z)<sub>b</sub> Marinari</td></tr>
+<tr><td>14-15</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Df-Ll)<sub>a</sub> Boeri<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(A-Di)<sub>a</sub> Rovigatti</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Paq-Z)<sub>b</sub> Marinari</td></tr>
+<tr><td>15-16</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Df-Ll)<sub>a</sub> Boeri<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(A-Di)<sub>a</sub> Rovigatti</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Paq-Z)<sub>b</sub> Marinari</td></tr>
+<tr><td>16-17</td><td><span class="T1">Laboratorio di Calcolo</span><br>(Df-Ll)<sub>a</sub> Boeri<br><small>dal 12/10/26 al 15/01/27</small></td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Dl-Pap)<sub>a</sub> Mancini Terracciano</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(A-Di)<sub>b</sub> Rovigatti</td></tr>
+<tr><td>17-18</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Dl-Pap)<sub>a</sub> Mancini Terracciano</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(A-Di)<sub>b</sub> Rovigatti</td></tr>
+<tr><td>18-19</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="S">Altri Corsi INF </span><br> .</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(Dl-Pap)<sub>a</sub> Mancini Terracciano</td><td><span class="T2">Laboratorio di Fisica Computazionale I</span><br>(A-Di)<sub>b</sub> Rovigatti</td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="LabTermo"></a>Laboratorio di Termodinamica (Laboratori di Via Tiburtina – RM025)</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>9-10</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>10-11</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Dl-Pap)<sub>a</sub> Del Re E.</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(A-Di)<sub></sub> Santanastasio</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Paq-Z)<sub></sub> Del Re D.</td><td></td><td></td></tr>
+<tr><td>11-12</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Dl-Pap)<sub>a</sub> Del Re E.</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(A-Di)<sub></sub> Santanastasio</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Paq-Z)<sub></sub> Del Re D.</td><td></td><td></td></tr>
+<tr><td>12-13</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Dl-Pap)<sub>a</sub> Del Re E.</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(A-Di)<sub></sub> Santanastasio</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Paq-Z)<sub></sub> Del Re D.</td><td></td><td></td></tr>
+<tr><td>13-14</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Dl-Pap)<sub>a</sub> Del Re E.</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(A-Di)<sub></sub> Santanastasio</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Paq-Z)<sub></sub> Del Re D.</td><td></td><td></td></tr>
+<tr><td>14-15</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>15-16</td><td></td><td></td><td></td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Dl-Pap)<sub>b</sub> Del Re E.</td><td></td></tr>
+<tr><td>16-17</td><td></td><td></td><td></td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Dl-Pap)<sub>b</sub> Del Re E.</td><td></td></tr>
+<tr><td>17-18</td><td></td><td></td><td></td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Dl-Pap)<sub>b</sub> Del Re E.</td><td></td></tr>
+<tr><td>18-19</td><td></td><td></td><td></td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Dl-Pap)<sub>b</sub> Del Re E.</td><td></td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="Majorana"></a>Majorana</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td></td><td></td><td><span class="M1">Stellar Astrophysics </span><br> Schneider</td><td></td><td></td></tr>
+<tr><td>9-10</td><td></td><td><span class="M1">Topics in Quantum Mechanics and Field Theory </span><br> Pelissetto</td><td><span class="M1">Stellar Astrophysics </span><br> Schneider</td><td></td><td><span class="M2">Statistical Physics and Machine Learning </span><br> Cammarota</td></tr>
+<tr><td>10-11</td><td><span class="M2">Statistical Physics and Machine Learning </span><br> Cammarota</td><td><span class="M2">Phenomenology of the Standard Model </span><br> Nardecchia/Valli</td><td><span class="M2">Surface Physics and Nanostructures </span><br> Betti</td><td><span class="M2">Superconductivity and Superfluidity </span><br> Benfatto</td><td><span class="M2">Statistical Physics and Machine Learning </span><br> Cammarota</td></tr>
+<tr><td>11-12</td><td><span class="M2">Statistical Physics and Machine Learning </span><br> Cammarota</td><td></td><td><span class="M2">Surface Physics and Nanostructures </span><br> Betti</td><td><span class="M2">Superconductivity and Superfluidity </span><br> Benfatto</td><td><span class="M2">Statistical Physics and Machine Learning </span><br> Cammarota</td></tr>
+<tr><td>12-13</td><td></td><td><span class="M1">Astrophysics Laboratory I </span><br> De Bernardis</td><td><span class="M1">Physics Laboratory I (Part.) </span><br> Voena</td><td><span class="M2">Mathematical Statistical Field Theory </span><br> Mastropietro</td><td><span class="M2">Surface Physics and Nanostructures </span><br> Betti</td></tr>
+<tr><td>13-14</td><td></td><td><span class="M1">Astrophysics Laboratory I </span><br> De Bernardis</td><td><span class="M1">Physics Laboratory I (Part.) </span><br> Voena</td><td><span class="M2">Mathematical Statistical Field Theory </span><br> Mastropietro</td><td><span class="M2">Surface Physics and Nanostructures </span><br> Betti</td></tr>
+<tr><td>14-15</td><td><span class="M1">Computational Statistical Mechanics </span><br> De Michele</td><td><span class="M1">Advanced Mathematical Methods for Physics </span><br> Crisanti</td><td><span class="M2">Physics of Solids </span><br> Mauri</td><td></td><td><span class="M1">Computational Statistical Mechanics </span><br> De Michele</td></tr>
+<tr><td>15-16</td><td><span class="M1">Computational Statistical Mechanics </span><br> De Michele</td><td><span class="M1">Advanced Mathematical Methods for Physics </span><br> Crisanti</td><td><span class="M2">Physics of Solids </span><br> Mauri</td><td><span class="M1">Fundamentals of Quantum Optics </span><br> Trotta</td><td><span class="M1">Computational Statistical Mechanics </span><br> De Michele</td></tr>
+<tr><td>16-17</td><td><span class="M2">Physics of Solids </span><br> Mauri</td><td><span class="M2">Many Body Physics </span><br> Caprara</td><td><span class="M1">Fundamentals of Quantum Optics </span><br> Trotta</td><td><span class="M1">Fundamentals of Quantum Optics </span><br> Trotta</td><td><span class="M1">Physics Laboratory I (Part.) </span><br> Voena</td></tr>
+<tr><td>17-18</td><td><span class="M2">Many Body Physics </span><br> Caprara</td><td><span class="M2">Many Body Physics </span><br> Caprara</td><td><span class="M1">Fundamentals of Quantum Optics </span><br> Trotta</td><td><span class="M1">Advanced Mathematical Methods for Physics </span><br> Crisanti</td><td><span class="M2">Mathematical Statistical Field Theory </span><br> Mastropietro</td></tr>
+<tr><td>18-19</td><td><span class="M2">Many Body Physics </span><br> Caprara</td><td></td><td></td><td><span class="M1">Advanced Mathematical Methods for Physics </span><br> Crisanti</td><td><span class="M2">Mathematical Statistical Field Theory </span><br> Mastropietro</td></tr>
+
+			</table>
+		</br></br>
+		
+			<h3><a id="AulaIII"></a>Aula III (edificio Caglioti di Chimica - CU032)</h3>
+			
+			
+			<table style="width: 500px">
+			<tr>
+		        <td class="legend"><span class="T1">Triennale I</span></td>
+		        <td class="legend"><span class="T2">Triennale II</span></td>
+		        <td class="legend"><span class="T3">Triennale III</span></td>
+		        <td class="legend"><span class="M1">Magistrale I</span></td>
+		        <td class="legend"><span class="M2">Magistrale II</span></td>
+	        </tr>
+	        </table>
+	        
+	        <table class="classroom">
+		        <tr>
+		        	<th>ora</th>
+		        	<th>LUN</th>
+		        	<th>MAR</th>
+		        	<th>MER</th>
+		        	<th>GIO</th>
+		        	<th>VEN</th>
+		        </tr>
+				<tr><td>8-9</td><td><span class="M1">Group Theory in Mathematical Physics </span><br> Panati</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Piq-Z)<sub></sub> Felici</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Dl-Pap)<sub></sub> Del Re E.</td><td><span class="T3">Meccanica Statistica</span><br>(A-Fa)<sub></sub> Caprara</td><td><span class="M1">Introduction to Quantum Field Theory (K-Z) </span><br> Esposito</td></tr>
+<tr><td>9-10</td><td><span class="M1">Group Theory in Mathematical Physics </span><br> Panati</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Piq-Z)<sub></sub> Felici</td><td><span class="T2">Termodinamica e Laboratorio</span><br>(Dl-Pap)<sub></sub> Del Re E.</td><td><span class="T3">Meccanica Statistica</span><br>(A-Fa)<sub></sub> Caprara<br><small>dal 07/12/26 al 15/01/27</small></td><td><span class="M1">Introduction to Quantum Field Theory (K-Z) </span><br> Esposito</td></tr>
+<tr><td>10-11</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Piq-Z)<sub></sub> Felici</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(A-Fa)<sub></sub> Vignati/Raggi</td><td><span class="T3">Meccanica Quantistica</span><br>(A-Fa)<sub></sub> Pelissetto</td><td></td><td></td></tr>
+<tr><td>11-12</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(Piq-Z)<sub></sub> Felici</td><td><span class="T3">Laboratorio di Segnali e Sistemi</span><br>(A-Fa)<sub></sub> Vignati/Raggi</td><td><span class="T3">Meccanica Quantistica</span><br>(A-Fa)<sub></sub> Pelissetto</td><td></td><td><span class="T3">Calcolo delle Probabilità </span><br> Paoluzzi</td></tr>
+<tr><td>12-13</td><td><span class="T3">Meccanica Quantistica</span><br>(A-Fa)<sub></sub> Pelissetto</td><td><span class="T3">Meccanica Quantistica</span><br>(A-Fa)<sub></sub> Pelissetto</td><td><span class="T3">Calcolo delle Probabilità </span><br> Paoluzzi</td><td><span class="T3">Programmazione scientifica ++ </span><br> De Michele</td><td><span class="T3">Calcolo delle Probabilità </span><br> Paoluzzi</td></tr>
+<tr><td>13-14</td><td><span class="T3">Meccanica Quantistica</span><br>(A-Fa)<sub></sub> Pelissetto</td><td><span class="T3">Meccanica Quantistica</span><br>(A-Fa)<sub></sub> Pelissetto</td><td><span class="T3">Meccanica Statistica</span><br>(Fb-Pip)<sub></sub> Sciortino</td><td><span class="T3">Programmazione scientifica ++ </span><br> De Michele</td><td></td></tr>
+<tr><td>14-15</td><td><span class="T3">Meccanica Statistica</span><br>(A-Fa)<sub></sub> Caprara</td><td></td><td><span class="T3">Meccanica Statistica</span><br>(Fb-Pip)<sub></sub> Sciortino</td><td><span class="M1">Statistical Mechanics and Critical Phenomena </span><br> Marinari<br><small>dal 28/09/26 al 13/11/26</small></td><td><span class="M2">Many Body Physics </span><br> Caprara</td></tr>
+<tr><td>15-16</td><td><span class="T3">Meccanica Statistica</span><br>(A-Fa)<sub></sub> Caprara</td><td></td><td><span class="T3">Meccanica Quantistica e Statistica </span><br> van Heck</td><td><span class="M1">Statistical Mechanics and Critical Phenomena </span><br> Marinari<br><small>dal 28/09/26 al 13/11/26</small></td><td><span class="T3">Meccanica Statistica</span><br>(A-Fa)<sub></sub> Caprara</td></tr>
+<tr><td>16-17</td><td><span class="T3">Laboratorio di Astrofisica </span><br> Battistelli</td><td></td><td><span class="T3">Meccanica Quantistica e Statistica </span><br> van Heck</td><td></td><td><span class="T3">Meccanica Statistica</span><br>(A-Fa)<sub></sub> Caprara</td></tr>
+<tr><td>17-18</td><td><span class="T3">Laboratorio di Astrofisica </span><br> Battistelli</td><td></td><td><span class="M1">Group Theory in Mathematical Physics </span><br> Panati</td><td></td><td><span class="T3">Programmazione scientifica ++ </span><br> De Michele</td></tr>
+<tr><td>18-19</td><td></td><td></td><td></td><td></td><td><span class="T3">Programmazione scientifica ++ </span><br> De Michele</td></tr>
+
+			</table>
+		</br></br>
+		
+		
+	</div>
+</body>
+</html>
